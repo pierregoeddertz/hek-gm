@@ -1,0 +1,112 @@
+'use client';
+
+import { useState, useEffect } from 'react';
+import { NewsService } from '@/lib/services/news';
+import Director from '@/components/Layout/Director';
+import styles from './Promoter.module.css';
+
+export interface PromoterItem {
+  id: string;
+  image_url: string;
+  title?: string;
+  subtitle?: string;
+  content?: string;
+  index?: string;
+  label?: string;
+}
+
+export default function Promoter() {
+  const [current, setCurrent] = useState(0);
+  const [isVisible, setIsVisible] = useState(false);
+  const [items, setItems] = useState<PromoterItem[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    setIsLoading(true);
+    NewsService.getSlideshowContent()
+      .then((articles) => {
+        setItems(
+          articles.map((article: any, index: number) => ({
+            ...article,
+            index: String(index + 1).padStart(2, '0'),
+            label: article.title,
+          }))
+        );
+        setError(null);
+      })
+      .catch((err) => {
+        setError(err.message || String(err));
+        console.error('Promoter fetch error:', err);
+      })
+      .finally(() => setIsLoading(false));
+  }, []);
+
+  useEffect(() => {
+    if (items.length > 0) {
+      setIsVisible(true);
+    }
+  }, [items.length]);
+
+  useEffect(() => {
+    const images: HTMLImageElement[] = [];
+    items.forEach((item) => {
+      if (item.image_url) {
+        const img = new Image();
+        img.src = item.image_url;
+        images.push(img);
+      }
+    });
+    return () => {
+      images.splice(0, images.length);
+    };
+  }, [items]);
+
+  useEffect(() => {
+    if (items.length <= 1) {
+      setIsVisible(false);
+      setTimeout(() => setIsVisible(true), 50);
+      return;
+    }
+    if (isLoading) return;
+    setIsVisible(false);
+    const fadeInTimeout = setTimeout(() => setIsVisible(true), 50);
+    const holdDuration = 5000;
+    const totalDuration = holdDuration + 750;
+    const nextTimeout = setTimeout(() => {
+      setIsVisible(false);
+      setCurrent((p) => (p + 1) % items.length);
+    }, totalDuration);
+    return () => {
+      clearTimeout(fadeInTimeout);
+      clearTimeout(nextTimeout);
+    };
+  }, [current, items.length, isLoading]);
+
+  if (error) return <>Fehler: {error}</>;
+
+  let content = null;
+  if (items.length === 0 || isLoading) {
+    content = <img className={styles.img} alt="Promoter Platzhalter" draggable={false} />;
+  } else {
+    const data = items[current];
+    content = (
+      <img
+        className={
+          styles.img +
+          ' ' +
+          (isVisible ? styles.visible : styles.hidden)
+        }
+        src={data.image_url}
+        alt={data.title || 'Promoter Slide'}
+        draggable={false}
+      />
+    );
+  }
+
+  return (
+    <Director layout="vertical 2 b" className={styles.container}>
+      {content}
+    </Director>
+  );
+} 

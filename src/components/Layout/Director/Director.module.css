@@ -1,0 +1,55 @@
+.container {
+  width: 100%;
+}
+
+.vertical {
+  display: flex;
+  flex-direction: column;
+}
+
+.horizontal {
+  display: flex;
+  flex-direction: row;
+}
+
+.alignStart {
+  align-items: flex-start;
+}
+
+.alignCenter {
+  align-items: center;
+}
+
+.alignEnd {
+  align-items: flex-end;
+}
+
+.justifyStart {
+  justify-content: flex-start;
+}
+
+.justifyCenter {
+  justify-content: center;
+}
+
+.justifyEnd {
+  justify-content: flex-end;
+}
+
+.widthMax {
+  max-width: var(--max_1);
+}
+
+.paddingX {
+  padding-left: var(--vlu_x);
+  padding-right: var(--vlu_x);
+}
+
+.paddingY {
+  padding-top: var(--vlu_y);
+  padding-bottom: var(--vlu_y);
+}
+
+.gap {
+  gap: var(--vlu_x);
+} 

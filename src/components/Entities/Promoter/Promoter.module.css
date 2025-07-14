@@ -1,0 +1,29 @@
+.container {
+  width: 100%;
+  height: 100vh;
+  position: relative;
+  overflow: hidden; 
+  background-color: var(--clrd_a);
+}
+
+.img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  transition: opacity var(--anm), transform var(--anm);
+  opacity: 0;
+  transform: scale(1.1);
+  display: block;
+}
+
+.visible {
+  opacity: .5;
+  transform: scale(1.0);
+}
+
+.hidden {
+  opacity: 0;
+  transform: scale(1.1);
+  transition: none;
+} 

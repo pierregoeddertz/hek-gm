@@ -1,0 +1,56 @@
+.root {
+  display: flex;
+  flex-direction: column;
+  gap: var(--v_2_5);
+  padding: var(--v_8) 0;
+  max-width: 600px;
+}
+
+.meta {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--v_2);
+  color: var(--z);
+}
+
+.metaSep {
+  width: 1px;
+  background: var(--m);
+  height: 1.2em;
+}
+
+.title {
+  font-size: var(--v_6);
+  color: var(--z);
+  line-height: 133.33%;
+  letter-spacing: .99px;
+}
+
+.subtitle {
+  font-size: clamp(18px, 3vw, 28px);
+  color: var(--z);
+  opacity: 0.85;
+  max-width: 60ch;
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  gap: var(--v_3);
+}
+
+.accordion {
+  overflow: hidden;
+  max-height: 0;
+  transition: max-height var(--anm);
+}
+
+.accInner {
+  padding: var(--v_5) 0;
+}
+
+.header {
+  display: flex;
+  flex-direction: column;
+  gap: var(--v_2);
+} 

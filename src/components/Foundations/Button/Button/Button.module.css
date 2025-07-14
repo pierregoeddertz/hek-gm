@@ -1,0 +1,9 @@
+.root {
+  color: var(--z);
+  cursor: pointer;
+}
+
+.root:hover,
+.root:focus-visible {
+  color: blue;
+}
