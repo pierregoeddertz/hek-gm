@@ -5,11 +5,10 @@ import { ButtonHTMLAttributes, forwardRef } from "react";
 
 export type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
   className?: string;
-  dynamic?: boolean;
 };
 
 const Button = forwardRef<HTMLButtonElement, ButtonProps>(
-  ({ className = "", dynamic, children, ...rest }, ref) => {
+  ({ className = "", children, ...rest }, ref) => {
     const combined = `${styles.root} ${className}`.trim();
     return (
       <button ref={ref} type="button" {...rest} className={combined}>
