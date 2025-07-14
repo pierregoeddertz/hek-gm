@@ -25,9 +25,9 @@ export default function Promoter() {
   useEffect(() => {
     setIsLoading(true);
     NewsService.getSlideshowContent()
-      .then((articles) => {
+      .then((articles: PromoterItem[]) => {
         setItems(
-          articles.map((article: any, index: number) => ({
+          articles.map((article, index) => ({
             ...article,
             index: String(index + 1).padStart(2, '0'),
             label: article.title,

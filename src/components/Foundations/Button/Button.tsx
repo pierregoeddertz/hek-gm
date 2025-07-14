@@ -9,7 +9,7 @@ export type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
 };
 
 const Button = forwardRef<HTMLButtonElement, ButtonProps>(
-  ({ className = "", dynamic = false, children, ...rest }, ref) => {
+  ({ className = "", dynamic, children, ...rest }, ref) => {
     const combined = `${styles.root} ${className}`.trim();
     return (
       <button ref={ref} type="button" {...rest} className={combined}>

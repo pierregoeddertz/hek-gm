@@ -3,7 +3,7 @@ import styles from './Director.module.css';
 
 interface DirectorProps {
   children: React.ReactNode;
-  layout?: string; // "div vertical 2 b widthMax paddingX gap" oder "vertical 2 b widthMax paddingX gap"
+  layout?: string; // "div vertical 2 b maxWidth paddingX gap" oder "vertical 2 b maxWidth paddingX gap"
   as?: React.ElementType;
   className?: string;
 }
@@ -11,11 +11,10 @@ interface DirectorProps {
 export default function Director({
   children,
   layout,
-  as: Component = 'div',
   className = '',
 }: DirectorProps) {
   const parseLayout = (layoutString?: string) => {
-    if (!layoutString) return { element: 'div', direction: 'vertical', align: 1, justify: 'a', widthMax: false, paddingX: false, paddingY: false, gap: false };
+    if (!layoutString) return { element: 'div', direction: 'vertical', align: 1, justify: 'a', maxWidth: false, paddingX: false, paddingY: false, gap: false };
     
     const parts = layoutString.split(' ');
     
@@ -30,7 +29,7 @@ export default function Director({
     const align = parseInt(parts[startIndex + 1]) as 1 | 2 | 3;
     const justify = parts[startIndex + 2] as 'a' | 'b' | 'c';
     
-    const widthMax = parts.includes('widthMax');
+    const maxWidth = parts.includes('maxWidth');
     const paddingX = parts.includes('paddingX');
     const paddingY = parts.includes('paddingY');
     const gap = parts.includes('gap');
@@ -40,14 +39,14 @@ export default function Director({
       direction: direction || 'vertical',
       align: align || 1,
       justify: justify || 'a',
-      widthMax,
+      maxWidth,
       paddingX,
       paddingY,
       gap,
     };
   };
 
-  const { element, direction, align, justify, widthMax, paddingX, paddingY, gap } = parseLayout(layout);
+  const { element, direction, align, justify, maxWidth, paddingX, paddingY, gap } = parseLayout(layout);
 
   const getFlexClasses = () => {
     const flexDirection = direction === 'vertical' ? styles.vertical : styles.horizontal;
@@ -70,7 +69,7 @@ export default function Director({
   const getContainerClasses = () => {
     const classes = [styles.container];
     
-    if (widthMax) classes.push(styles.widthMax);
+    if (maxWidth) classes.push(styles.maxWidth);
     if (paddingX) classes.push(styles.paddingX);
     if (paddingY) classes.push(styles.paddingY);
     if (gap) classes.push(styles.gap);

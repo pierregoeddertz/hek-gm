@@ -6,8 +6,16 @@ import Card from '@/components/Foundations/Card';
 import { useEffect, useState } from 'react';
 import { NewsService } from '@/lib/services/news';
 
+type NewsItem = {
+  id: string;
+  title: string;
+  created_at: string;
+  image_url: string;
+  // ggf. weitere Felder
+};
+
 export default function News() {
-  const [news, setNews] = useState<any[]>([]);
+  const [news, setNews] = useState<NewsItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 

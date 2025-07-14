@@ -25,7 +25,6 @@ export default function Arm({
   label,
   showBack = false,
   children,
-  className = "",
   onClick,
   href,
 }: ArmProps) {
