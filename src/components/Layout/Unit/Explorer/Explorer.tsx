@@ -29,7 +29,7 @@ export default function Explorer({
     translateRef.current = x;
     latestTranslate.current = x;
     if (trackRef.current) {
-      trackRef.current.style.transform = `translate3d(${x}px,0,0)`;
+      trackRef.current.style.transform = `translateX(${x}px)`;
     }
     if (rafPending.current === null) {
       rafPending.current = requestAnimationFrame(() => {
@@ -43,10 +43,6 @@ export default function Explorer({
   const limitsRef = useRef({ min: 0, max: 0 });
   const clamp = useCallback((x: number) => {
     const { min, max } = limitsRef.current;
-    // Debug: Log die Werte für Touch-Probleme
-    if (typeof window !== 'undefined' && window.navigator.userAgent.includes('iPhone')) {
-      console.log('clamp', { min, max, x });
-    }
     return Math.min(max, Math.max(min, x));
   }, []);
 
@@ -184,7 +180,6 @@ export default function Explorer({
     const updateLimits = () => {
       const wC = containerRef.current?.clientWidth || 0;
       const wT = trackRef.current?.scrollWidth || 0;
-      // min ist negativ, wenn Track breiter als Container
       limitsRef.current = { min: Math.min(0, wC - wT), max: 0 };
       setTranslate(clamp(translateRef.current));
     };
@@ -202,9 +197,9 @@ export default function Explorer({
   }, [clamp, removeClassDebounced, setTranslate]);
 
   return (
-    <Director
+    <div
       ref={containerRef}
-      className={className}
+      className={`${styles.root} ${className}`}
       style={style}
       data-dragger="true"
       onPointerDown={onPointerDown}
@@ -212,15 +207,10 @@ export default function Explorer({
       onPointerUp={onPointerUp}
       onPointerCancel={onPointerUp}
       onWheel={onWheel}
-      layout="widthMax"
     >
-      <Director
-        ref={trackRef}
-        layout="horizontal 3 a paddingX gap"
-        className={styles.track}
-      >
+      <Director ref={trackRef} layout="horizontal 1 a">
         {children}
       </Director>
-    </Director>
+    </div>
   );
 } 
