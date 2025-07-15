@@ -112,17 +112,17 @@ export default function Explorer({
   const startMomentum = () => {
     const samples = moveSamples.current;
     let v = 0;
-    // Zeitfenster für Geschwindigkeit auf 150ms erhöhen
+    // Zeitfenster für Geschwindigkeit auf 200ms erhöhen
     const now = performance.now();
-    const relevantSamples = samples.filter(s => now - s.t <= 150);
+    const relevantSamples = samples.filter(s => now - s.t <= 200);
     if (relevantSamples.length > 1) {
       const first = relevantSamples[0], last = relevantSamples[relevantSamples.length - 1];
       v = ((last.x - first.x) / (last.t - first.t)) * 1000;
     }
-    // Maximale Geschwindigkeit auf ±9000 erhöhen
-    v = Math.max(-9000, Math.min(9000, v));
-    // Friction auf 0.91 senken
-    const friction = 0.91;
+    // Maximale Geschwindigkeit auf ±20000 erhöhen
+    v = Math.max(-20000, Math.min(20000, v));
+    // Friction auf 0.88 senken
+    const friction = 0.88;
     let lastTs = performance.now();
 
     const step = (now: number) => {

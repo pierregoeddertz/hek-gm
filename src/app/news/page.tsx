@@ -33,13 +33,13 @@ export default function News() {
         {loading && <div>Lädt…</div>}
         {!loading && !error && (
           <Explorer>
-            {news.map((item) => {
+            {[...news, ...news, ...news].map((item, idx) => {
               const dateObj = item.created_at ? new Date(item.created_at) : null;
               const date = dateObj ? dateObj.toLocaleDateString('de-DE') : '';
               const time = dateObj ? dateObj.toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' }) : '';
               return (
                 <Card
-                  key={item.id}
+                  key={item.id + '-' + idx}
                   title={item.title || 'Ohne Titel'}
                   date={date}
                   time={time}
