@@ -84,12 +84,18 @@ export default function Explorer({
       setTimeout(() => {
         document.body.removeAttribute('data-dragger-has-moved');
       }, 100);
+      dragState.current.dragging = false;
+      e.currentTarget.releasePointerCapture(e.pointerId);
+      document.body.style.userSelect = '';
+      document.body.classList.remove('draggerTrue');
+      startMomentum();
+    } else {
+      // Nur Klick, kein Drag: keine Bewegung, keine Momentum-Logik
+      dragState.current.dragging = false;
+      e.currentTarget.releasePointerCapture(e.pointerId);
+      document.body.style.userSelect = '';
+      document.body.classList.remove('draggerTrue');
     }
-    dragState.current.dragging = false;
-    e.currentTarget.releasePointerCapture(e.pointerId);
-    document.body.style.userSelect = '';
-    document.body.classList.remove('draggerTrue');
-    startMomentum();
   };
 
   // --- MOMENTUM ---
@@ -106,12 +112,17 @@ export default function Explorer({
   const startMomentum = () => {
     const samples = moveSamples.current;
     let v = 0;
-    if (samples.length > 1) {
-      const first = samples[0], last = samples[samples.length - 1];
+    // Zeitfenster für Geschwindigkeit auf 150ms erhöhen
+    const now = performance.now();
+    const relevantSamples = samples.filter(s => now - s.t <= 150);
+    if (relevantSamples.length > 1) {
+      const first = relevantSamples[0], last = relevantSamples[relevantSamples.length - 1];
       v = ((last.x - first.x) / (last.t - first.t)) * 1000;
     }
-    v = Math.max(-5000, Math.min(5000, v));
-    const friction = 0.93;
+    // Maximale Geschwindigkeit auf ±9000 erhöhen
+    v = Math.max(-9000, Math.min(9000, v));
+    // Friction auf 0.91 senken
+    const friction = 0.91;
     let lastTs = performance.now();
 
     const step = (now: number) => {
@@ -208,7 +219,7 @@ export default function Explorer({
       onPointerCancel={onPointerUp}
       onWheel={onWheel}
     >
-      <Director ref={trackRef} layout="horizontal 1 a gap paddingX" className={styles.track}>
+      <Director ref={trackRef} layout="horizontal 3 a gap paddingX" className={styles.track}>
         {children}
       </Director>
     </div>
