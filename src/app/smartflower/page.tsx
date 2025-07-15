@@ -1,4 +1,4 @@
-import Unit from "@/components/Layout/Unit";
+import { Unit } from "@/components/Layout/Unit";
 import Promoter from "@/components/Entities/Promoter";
 
 export default function Smartflower() {

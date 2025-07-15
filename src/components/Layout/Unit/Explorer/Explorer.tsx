@@ -8,14 +8,12 @@ import { debounce } from 'lodash';
 export type ExplorerProps = {
   children?: React.ReactNode;
   className?: string;
-  centerFirst?: boolean;
   style?: React.CSSProperties;
 };
 
 export default function Explorer({
   children,
   className = '',
-  centerFirst = false,
   style,
 }: ExplorerProps) {
   const containerRef = useRef<HTMLDivElement>(null);

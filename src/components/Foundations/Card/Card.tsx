@@ -1,6 +1,5 @@
 'use client';
 
-import Image from 'next/image';
 import styles from './Card.module.css';
 
 export type CardProps = {
@@ -25,7 +24,7 @@ const aspectRatioToNumber = {
   '1:1': 1,
 };
 
-export default function Card({ image, aspectRatio = '16:9', title, time, date, className = '', ...props }: CardProps) {
+export default function Card({ image, aspectRatio = '16:9', title, time, date, className = '' }: CardProps) {
   const ratio = aspectRatioToNumber[aspectRatio] || aspectRatioToNumber['16:9'];
   const width = 300;
   const height = Math.round(width / ratio);

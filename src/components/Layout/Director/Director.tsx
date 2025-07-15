@@ -26,11 +26,11 @@ const Director = forwardRef<HTMLDivElement, DirectorProps>(
       const tokens = isHtmlElement ? parts.slice(1) : parts;
 
       // Direction
-      let direction: 'vertical' | 'horizontal' = tokens.includes('horizontal') ? 'horizontal' : 'vertical';
+      const direction: 'vertical' | 'horizontal' = tokens.includes('horizontal') ? 'horizontal' : 'vertical';
       // Align
-      let align: 1 | 2 | 3 = (tokens.find((t) => ['1', '2', '3'].includes(t)) as unknown as 1 | 2 | 3) || 1;
+      const align: 1 | 2 | 3 = (tokens.find((t) => ['1', '2', '3'].includes(t)) as unknown as 1 | 2 | 3) || 1;
       // Justify
-      let justify: 'a' | 'b' | 'c' = (tokens.find((t) => ['a', 'b', 'c'].includes(t)) as 'a' | 'b' | 'c') || 'b';
+      const justify: 'a' | 'b' | 'c' = (tokens.find((t) => ['a', 'b', 'c'].includes(t)) as 'a' | 'b' | 'c') || 'b';
       const widthMax = tokens.includes('widthMax');
       const paddingX = tokens.includes('paddingX');
       const paddingY = tokens.includes('paddingY');
@@ -80,5 +80,7 @@ const Director = forwardRef<HTMLDivElement, DirectorProps>(
     );
   }
 );
+
+Director.displayName = 'Director';
 
 export default Director; 

@@ -1,4 +1,4 @@
-import { Unit, Explorer } from '@/components/Layout/Unit';
+import { Unit } from '@/components/Layout/Unit';
 import Promoter from "@/components/Entities/Promoter";
 import Introducer from "@/components/Entities/Introducer";
 
