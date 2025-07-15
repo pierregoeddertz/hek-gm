@@ -19,7 +19,7 @@ const Director = forwardRef<HTMLDivElement, DirectorProps>(
     ...rest
   }, ref) => {
     const parseLayout = (layoutString?: string) => {
-      if (!layoutString || !layoutString.trim()) return { element: 'div', direction: 'vertical', align: 1, justify: 'b', widthMax: false, paddingX: false, paddingY: false, gap: false, heightFull: false };
+      if (!layoutString || !layoutString.trim()) return { element: 'div', direction: 'vertical', align: 1, justify: 'b', widthMax: false, paddingX: false, paddingY: false, gap: false, heightMin: false };
       const parts = layoutString.trim().split(/\s+/);
       const isHtmlElement = ['div', 'article', 'aside', 'ul', 'ol', 'li'].includes(parts[0]);
       const element = isHtmlElement ? parts[0] : 'div';
@@ -35,11 +35,11 @@ const Director = forwardRef<HTMLDivElement, DirectorProps>(
       const paddingX = tokens.includes('paddingX');
       const paddingY = tokens.includes('paddingY');
       const gap = tokens.includes('gap');
-      const heightFull = tokens.includes('heightFull');
-      return { element, direction, align, justify, widthMax, paddingX, paddingY, gap, heightFull };
+      const heightMin = tokens.includes('heightMin');
+      return { element, direction, align, justify, widthMax, paddingX, paddingY, gap, heightMin };
     };
 
-    const { element, direction, align, justify, widthMax, paddingX, paddingY, gap, heightFull } = parseLayout(layout);
+    const { element, direction, align, justify, widthMax, paddingX, paddingY, gap, heightMin } = parseLayout(layout);
 
     const getFlexClasses = () => {
       const flexDirection = direction === 'vertical' ? styles.vertical : styles.horizontal;
@@ -62,7 +62,7 @@ const Director = forwardRef<HTMLDivElement, DirectorProps>(
       if (paddingX) classes.push(styles.paddingX);
       if (paddingY) classes.push(styles.paddingY);
       if (gap) classes.push(styles.gap);
-      if (heightFull) classes.push(styles.heightFull);
+      if (heightMin) classes.push(styles.heightMin);
       return classes.join(' ');
     };
 

@@ -28,7 +28,7 @@ export default function News() {
 
   return (
     <main>
-      <Unit layout="vertical 1 c widthMax heightFull">
+      <Unit layout="vertical 1 c widthMax heightMin">
         {error && <div>Fehler: {error}</div>}
         {loading && <div>Lädt…</div>}
         {!loading && !error && (

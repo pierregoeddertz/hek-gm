@@ -2,8 +2,8 @@
   width: 100%;
 }
 
-.heightFull {
-  height: 200dvh;
+.heightMin {
+  min-height: 100vh;
 }
 
 .widthMax {
