@@ -10,6 +10,7 @@
 } 
 
 .track {
+  display: inline-flex;
   will-change: transform;
   width: auto;
 }

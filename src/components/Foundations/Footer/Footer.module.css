@@ -1,0 +1,99 @@
+.root {
+  width: 100%;
+  background: #111;
+  color: #f5f5f5;
+  padding: 0 0 2.5rem 0;
+  border-top: 1px solid #222;
+}
+
+.ctaSection {
+  padding: 3.5rem 0 2.5rem 0;
+  text-align: left;
+}
+
+.ctaText {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.ctaSub {
+  font-size: 2rem;
+  color: #aaa;
+  font-weight: 400;
+  letter-spacing: 0.01em;
+}
+
+.ctaMain {
+  font-size: 2.7rem;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  color: #fff;
+}
+
+.grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 2.5rem 0 1.5rem 0;
+  border-bottom: 1px solid #222;
+  gap: 2rem;
+}
+
+.col {
+  min-width: 180px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.label {
+  font-size: 0.95rem;
+  color: #aaa;
+  letter-spacing: 0.08em;
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+  text-transform: uppercase;
+}
+
+.col a {
+  color: #fff;
+  text-decoration: none;
+  opacity: 0.85;
+  font-size: 1.08rem;
+  transition: opacity 0.2s;
+}
+
+.col a:hover {
+  opacity: 1;
+  text-decoration: underline;
+}
+
+.bottomRow {
+  max-width: 1100px;
+  margin: 0 auto;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1.5rem;
+  padding-top: 1.5rem;
+  font-size: 0.98rem;
+  color: #aaa;
+}
+
+.bottomRow a {
+  color: #aaa;
+  text-decoration: none;
+  margin: 0 1.5rem;
+  opacity: 0.8;
+}
+
+.bottomRow a:hover {
+  opacity: 1;
+  text-decoration: underline;
+} 
