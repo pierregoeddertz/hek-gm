@@ -1,14 +1,14 @@
-import Unit from "@/components/Layout/Unit";
+import { Unit, Explorer } from '@/components/Layout/Unit';
 import Promoter from "@/components/Entities/Promoter";
 import Introducer from "@/components/Entities/Introducer";
 
 export default function Home() {
   return (
     <main>
-      <Unit layout="vertical 1 a">
+      <Unit >
         <Promoter />
       </Unit>
-      <Unit layout="vertical 1 a widthMax paddingX paddingY">
+      <Unit layout="widthMax paddingX paddingY">
         <Introducer
           index="01"
           label="Intro"

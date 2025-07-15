@@ -24,7 +24,6 @@ export default function Explorer({
   // --- TRANSLATE STATE ---
   const translateRef = useRef(0);
   const [, forceUpdate] = useState({});
-
   const rafPending = useRef<number | null>(null);
   const latestTranslate = useRef(0);
 
@@ -32,7 +31,7 @@ export default function Explorer({
     translateRef.current = x;
     latestTranslate.current = x;
     if (trackRef.current) {
-      trackRef.current.style.transform = `translateX(${x}px)`;
+      trackRef.current.style.transform = `translate3d(${x}px,0,0)`;
     }
     if (rafPending.current === null) {
       rafPending.current = requestAnimationFrame(() => {
@@ -77,7 +76,7 @@ export default function Explorer({
     if (Math.abs(dx) > 5) {
       dragState.current.hasMoved = true;
     }
-    setTranslate( clamp(dragState.current.startT + dx) );
+    setTranslate(clamp(dragState.current.startT + dx));
   };
 
   const onPointerUp = (e: React.PointerEvent) => {
@@ -121,7 +120,7 @@ export default function Explorer({
       const dt = (now - lastTs) / 1000;
       lastTs = now;
       v *= Math.pow(friction, dt * 60);
-      const next = clamp( translateRef.current + v * dt );
+      const next = clamp(translateRef.current + v * dt);
       setTranslate(next);
       if (Math.abs(v) > 40) {
         momentumRaf.current = requestAnimationFrame(step);
@@ -157,7 +156,7 @@ export default function Explorer({
     if (Math.abs(e.deltaX) > Math.abs(e.deltaY)) {
       e.preventDefault();
       document.body.classList.add('draggerTrue');
-      const next = clamp( translateRef.current - e.deltaX );
+      const next = clamp(translateRef.current - e.deltaX);
       setTranslate(next);
       removeClassDebounced();
     }
@@ -184,19 +183,12 @@ export default function Explorer({
       const wC = containerRef.current?.clientWidth || 0;
       const wT = trackRef.current?.scrollWidth || 0;
       limitsRef.current = { min: Math.min(0, wC - wT), max: 0 };
-      if (centerFirst && trackRef.current) {
-        const svgs = trackRef.current.querySelectorAll('svg');
-        if (svgs[0]) trackRef.current.style.paddingLeft = `calc((100vw - ${svgs[0].getBoundingClientRect().width}px)/2)`;
-        if (svgs[svgs.length - 1]) trackRef.current.style.paddingRight = `calc((100vw - ${svgs[svgs.length - 1].getBoundingClientRect().width}px)/2)`;
-      }
-      setTranslate( clamp(translateRef.current) );
+      setTranslate(clamp(translateRef.current));
     };
-
     updateLimits();
     const ro = new ResizeObserver(updateLimits);
     if (containerRef.current) ro.observe(containerRef.current);
     if (trackRef.current) ro.observe(trackRef.current);
-
     window.addEventListener('resize', updateLimits);
     return () => {
       ro.disconnect();
@@ -204,12 +196,12 @@ export default function Explorer({
       removeClassDebounced.cancel();
       stopMomentum();
     };
-  }, [centerFirst, clamp, removeClassDebounced, setTranslate]);
+  }, [clamp, removeClassDebounced, setTranslate]);
 
   return (
-    <div
+    <Director
       ref={containerRef}
-      className={`${styles.root} ${className}`}
+      className={className}
       style={style}
       data-dragger="true"
       onPointerDown={onPointerDown}
@@ -217,15 +209,15 @@ export default function Explorer({
       onPointerUp={onPointerUp}
       onPointerCancel={onPointerUp}
       onWheel={onWheel}
+      layout="widthMax"
     >
-      <div
+      <Director
         ref={trackRef}
-        style={{ width: '100%', height: '100%' }}
+        layout="horizontal 3 a paddingX gap"
+        className={styles.track}
       >
-        <Director layout="horizontal 1 a">
-          {children}
-        </Director>
-      </div>
-    </div>
+        {children}
+      </Director>
+    </Director>
   );
 } 

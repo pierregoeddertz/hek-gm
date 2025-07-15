@@ -14,7 +14,7 @@ export default function Unit({
   className = '',
 }: UnitProps) {
   return (
-    <section className={styles.wrapper}>
+    <section className={styles.container}>
       <Director layout={layout} className={className}>
         {children}
       </Director>

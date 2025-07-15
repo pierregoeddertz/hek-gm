@@ -3,6 +3,7 @@
   flex-direction: column;
   gap: var(--v_1_5, 8px);
   width: 275px;
+  flex-shrink: 0;
 }
 
 .meta {
@@ -20,6 +21,11 @@
   position: relative;
   overflow: hidden;
 }
+
+.ratio-9-16 { aspect-ratio: 9 / 16; }
+.ratio-16-9 { aspect-ratio: 16 / 9; }
+.ratio-4-5  { aspect-ratio: 4 / 5; }
+.ratio-1-1  { aspect-ratio: 1 / 1; }
 
 .imageWrapper img {
   position: absolute;

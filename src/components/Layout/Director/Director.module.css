@@ -2,6 +2,28 @@
   width: 100%;
 }
 
+.heightFull {
+  height: 100dvh;
+}
+
+.widthMax {
+  max-width: var(--max_1);
+}
+
+.paddingX {
+  padding-left: var(--vlu_x);
+  padding-right: var(--vlu_x);
+}
+
+.paddingY {
+  padding-top: var(--vlu_y);
+  padding-bottom: var(--vlu_y);
+}
+
+.gap {
+  gap: var(--vlu_x);
+} 
+
 .vertical {
   display: flex;
   flex-direction: column;
@@ -35,21 +57,3 @@
 .justifyEnd {
   justify-content: flex-end;
 }
-
-.widthMax {
-  max-width: var(--max_1);
-}
-
-.paddingX {
-  padding-left: var(--vlu_x);
-  padding-right: var(--vlu_x);
-}
-
-.paddingY {
-  padding-top: var(--vlu_y);
-  padding-bottom: var(--vlu_y);
-}
-
-.gap {
-  gap: var(--vlu_x);
-} 

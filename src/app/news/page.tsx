@@ -1,8 +1,6 @@
-// Trigger redeploy: Dummy-Änderung für Vercel
 'use client';
 
-import Unit from "@/components/Layout/Unit";
-import Explorer from "@/components/Entities/Explorer";
+import { Unit, Explorer } from '@/components/Layout/Unit';
 import Card from '@/components/Foundations/Card';
 import { useEffect, useState } from 'react';
 import { NewsService } from '@/lib/services/news';
@@ -12,6 +10,7 @@ type NewsItem = {
   title: string;
   created_at: string;
   image_url: string;
+  aspect_ratio?: '9:16' | '16:9' | '4:5' | '1:1';
   // ggf. weitere Felder
 };
 
@@ -29,7 +28,7 @@ export default function News() {
 
   return (
     <main>
-      <Unit layout="vertical 1 a">
+      <Unit layout="vertical 1 c widthMax heightFull">
         {error && <div>Fehler: {error}</div>}
         {loading && <div>Lädt…</div>}
         {!loading && !error && (
@@ -45,6 +44,7 @@ export default function News() {
                   date={date}
                   time={time}
                   image={item.image_url || '/placeholder.png'}
+                  aspectRatio={item.aspect_ratio}
                 />
               );
             })}

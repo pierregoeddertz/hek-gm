@@ -1,11 +1,15 @@
 .root {
-  overflow-x: hidden;
   touch-action: pan-y;
   overscroll-behavior-x: contain;
   cursor: grab;
-  width: 100%;
+  width: 100%
 }
 
 .root:active {
   cursor: grabbing;
 } 
+
+.track {
+  will-change: transform;
+  width: auto;
+}
