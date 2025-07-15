@@ -43,6 +43,10 @@ export default function Explorer({
   const limitsRef = useRef({ min: 0, max: 0 });
   const clamp = useCallback((x: number) => {
     const { min, max } = limitsRef.current;
+    // Debug: Log die Werte für Touch-Probleme
+    if (typeof window !== 'undefined' && window.navigator.userAgent.includes('iPhone')) {
+      console.log('clamp', { min, max, x });
+    }
     return Math.min(max, Math.max(min, x));
   }, []);
 
@@ -180,6 +184,7 @@ export default function Explorer({
     const updateLimits = () => {
       const wC = containerRef.current?.clientWidth || 0;
       const wT = trackRef.current?.scrollWidth || 0;
+      // min ist negativ, wenn Track breiter als Container
       limitsRef.current = { min: Math.min(0, wC - wT), max: 0 };
       setTranslate(clamp(translateRef.current));
     };
