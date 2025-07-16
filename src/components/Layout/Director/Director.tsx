@@ -24,7 +24,7 @@ const Director = forwardRef<HTMLDivElement, DirectorProps>(
   }, ref) => {
     // Erkenne semantisches HTML-Element über gleichnamiges Prop
     let semanticElement: string | React.ElementType | undefined = undefined;
-    const restObj = rest as { [key: string]: any };
+    const restObj = rest as Record<string, unknown>;
     for (const el of htmlElements) {
       if (restObj[el]) {
         // Type Guard: Stelle sicher, dass nur string verwendet wird
@@ -52,7 +52,7 @@ const Director = forwardRef<HTMLDivElement, DirectorProps>(
       const justifyStr = parts.find((t) => ['a', 'b', 'c', 'd'].includes(t));
       const allowedJustify = ['a', 'b', 'c', 'd'] as const;
       let justify: 'a' | 'b' | 'c' | 'd' = 'b';
-      if (typeof justifyStr === 'string' && (allowedJustify as readonly string[]).includes(justifyStr)) {
+      if (typeof justifyStr === 'string' && (allowedJustify as readonly unknown[]).includes(justifyStr)) {
         justify = justifyStr as 'a' | 'b' | 'c' | 'd';
       }
       const widthMax = parts.includes('widthMax');
@@ -106,7 +106,7 @@ const Director = forwardRef<HTMLDivElement, DirectorProps>(
         className={`${getContainerClasses()} ${getFlexClasses()} ${className}`}
         style={style}
         ref={ref}
-        {...(restObj as Record<string, any>)}
+        {...(restObj as Record<string, unknown>)}
       >
         {children}
       </DirectorComponent>
