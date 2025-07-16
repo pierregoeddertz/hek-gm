@@ -36,9 +36,7 @@ export default function Scroller() {
               minDistance = distance;
               closestIndex = index;
             }
-          } catch (error) {
-            // ignore
-          }
+          } catch {} // ignore
         }
       });
       setActiveWordIndex(closestIndex);
