@@ -20,9 +20,12 @@
   padding-bottom: var(--vlu_y);
 }
 
-.gap {
+.gapX {
   gap: var(--vlu_x);
-} 
+}
+.gapY {
+  gap: var(--vlu_y);
+}
 
 .vertical {
   display: flex;
@@ -56,4 +59,8 @@
 
 .justifyEnd {
   justify-content: flex-end;
+}
+
+.justifySpaceBetween {
+  justify-content: space-between;
 }

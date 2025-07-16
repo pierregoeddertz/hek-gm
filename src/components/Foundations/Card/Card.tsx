@@ -26,7 +26,7 @@ const aspectRatioToNumber = {
 
 export default function Card({ image, aspectRatio = '16:9', title, time, date, className = '' }: CardProps) {
   const ratio = aspectRatioToNumber[aspectRatio] || aspectRatioToNumber['16:9'];
-  const width = 250;
+  const width = 290;
   const height = Math.round(width / ratio);
 
   return (

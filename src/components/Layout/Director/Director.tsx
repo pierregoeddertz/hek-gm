@@ -6,8 +6,12 @@ interface DirectorProps extends React.HTMLAttributes<HTMLDivElement> {
   layout?: string; // "div vertical 2 b widthMax paddingX gap" oder "vertical 2 b widthMax paddingX gap"
   as?: React.ElementType;
   className?: string;
-  style?: React.CSSProperties;
+  gapX?: boolean;
+  gapY?: boolean;
+  [key: string]: any;
 }
+
+const htmlElements = ['header', 'footer', 'article', 'section', 'nav', 'main', 'aside', 'ul', 'ol', 'li'];
 
 const Director = forwardRef<HTMLDivElement, DirectorProps>(
   ({
@@ -18,28 +22,37 @@ const Director = forwardRef<HTMLDivElement, DirectorProps>(
     as,
     ...rest
   }, ref) => {
-    const parseLayout = (layoutString?: string) => {
-      if (!layoutString || !layoutString.trim()) return { element: 'div', direction: 'vertical', align: 1, justify: 'b', widthMax: false, paddingX: false, paddingY: false, gap: false, heightMin: false };
-      const parts = layoutString.trim().split(/\s+/);
-      const isHtmlElement = ['div', 'article', 'aside', 'ul', 'ol', 'li'].includes(parts[0]);
-      const element = isHtmlElement ? parts[0] : 'div';
-      const tokens = isHtmlElement ? parts.slice(1) : parts;
+    // Erkenne semantisches HTML-Element über gleichnamiges Prop
+    let semanticElement: string | undefined = undefined;
+    const restAny = rest as any;
+    for (const el of htmlElements) {
+      if (restAny[el]) {
+        semanticElement = el;
+        delete restAny[el];
+        break;
+      }
+    }
+    const DirectorComponent = as || semanticElement || 'div';
 
+    const parseLayout = (layoutString?: string) => {
+      if (!layoutString || !layoutString.trim()) return { direction: 'vertical', align: 1, justify: 'b', widthMax: false, paddingX: false, paddingY: false, gapX: false, gapY: false, heightMin: false };
+      const parts = layoutString.trim().split(/\s+/);
       // Direction
-      const direction: 'vertical' | 'horizontal' = tokens.includes('horizontal') ? 'horizontal' : 'vertical';
+      const direction: 'vertical' | 'horizontal' = parts.includes('horizontal') ? 'horizontal' : 'vertical';
       // Align
-      const align: 1 | 2 | 3 = (tokens.find((t) => ['1', '2', '3'].includes(t)) as unknown as 1 | 2 | 3) || 1;
+      const align: 1 | 2 | 3 = (parts.find((t) => ['1', '2', '3'].includes(t)) as unknown as 1 | 2 | 3) || 1;
       // Justify
-      const justify: 'a' | 'b' | 'c' = (tokens.find((t) => ['a', 'b', 'c'].includes(t)) as 'a' | 'b' | 'c') || 'b';
-      const widthMax = tokens.includes('widthMax');
-      const paddingX = tokens.includes('paddingX');
-      const paddingY = tokens.includes('paddingY');
-      const gap = tokens.includes('gap');
-      const heightMin = tokens.includes('heightMin');
-      return { element, direction, align, justify, widthMax, paddingX, paddingY, gap, heightMin };
+      const justify: 'a' | 'b' | 'c' | 'd' = (parts.find((t) => ['a', 'b', 'c', 'd'].includes(t)) as 'a' | 'b' | 'c' | 'd') || 'b';
+      const widthMax = parts.includes('widthMax');
+      const paddingX = parts.includes('paddingX');
+      const paddingY = parts.includes('paddingY');
+      const gapX = parts.includes('gapX');
+      const gapY = parts.includes('gapY');
+      const heightMin = parts.includes('heightMin');
+      return { direction, align, justify, widthMax, paddingX, paddingY, gapX, gapY, heightMin };
     };
 
-    const { element, direction, align, justify, widthMax, paddingX, paddingY, gap, heightMin } = parseLayout(layout);
+    const { direction, align, justify, widthMax, paddingX, paddingY, gapX, gapY, heightMin } = parseLayout(layout);
 
     const getFlexClasses = () => {
       const flexDirection = direction === 'vertical' ? styles.vertical : styles.horizontal;
@@ -52,6 +65,7 @@ const Director = forwardRef<HTMLDivElement, DirectorProps>(
         a: styles.justifyStart,
         b: styles.justifyCenter,
         c: styles.justifyEnd,
+        d: styles.justifySpaceBetween,
       };
       return `${flexDirection} ${alignMap[align]} ${justifyMap[justify]}`;
     };
@@ -61,12 +75,19 @@ const Director = forwardRef<HTMLDivElement, DirectorProps>(
       if (widthMax) classes.push(styles.widthMax);
       if (paddingX) classes.push(styles.paddingX);
       if (paddingY) classes.push(styles.paddingY);
-      if (gap) classes.push(styles.gap);
+      if (gapX) classes.push(styles.gapX);
+      if (gapY) classes.push(styles.gapY);
       if (heightMin) classes.push(styles.heightMin);
       return classes.join(' ');
     };
 
-    const DirectorComponent = as || element;
+    // Entferne Layout-Props und gapX/gapY aus rest
+    const layoutProps = ['widthMax', 'paddingX', 'paddingY', 'gapX', 'gapY', 'heightMin'];
+    layoutProps.forEach((prop) => {
+      if (prop in restAny) {
+        delete restAny[prop];
+      }
+    });
 
     return (
       <DirectorComponent
@@ -81,6 +102,4 @@ const Director = forwardRef<HTMLDivElement, DirectorProps>(
   }
 );
 
-Director.displayName = 'Director';
-
-export default Director; 
+export default Director;

@@ -5,5 +5,5 @@
 
 .root:hover,
 .root:focus-visible {
-  color: blue;
+  opacity: .33;
 }

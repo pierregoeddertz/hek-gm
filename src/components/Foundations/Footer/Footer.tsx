@@ -34,7 +34,6 @@ export default function Footer() {
         <div className={styles.col}>
           <div className={styles.label}>LOCATION</div>
           <div>London, UK</div>
-          <div>{time}</div>
         </div>
         <div className={styles.col}>
           <div className={styles.label}>SOCIALS</div>

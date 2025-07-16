@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Outfit } from "next/font/google";
 import "./globals.css";
 import Footer from '@/components/Foundations/Footer';
+import Header from '@/components/Foundations/Header';
 
 const outfit = Outfit({
   variable: "--fnt",
@@ -21,8 +22,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={outfit.variable}>
+      <Header />
         {children}
-        <Footer />
+      <Footer />
       </body>
     </html>
   );

@@ -1,0 +1,99 @@
+.scrollerContainer {
+  position: relative;
+  background-color: #fff;
+  color: #000;
+  overflow: visible;
+  width: 100%;
+}
+
+.scrollerIntroducerSection {
+  position: relative;
+  color: white;
+  padding: 2rem;
+  z-index: 20;
+  margin-top: -100vh;
+}
+
+.scrollerWordsSection {
+  position: relative;
+  padding: 4rem 2rem;
+  z-index: 20;
+}
+
+.scrollerWordsList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  margin-left: 5vw;
+}
+
+.scrollerWordItem {
+  font-size: 2rem;
+  font-weight: 800;
+  margin-bottom: 2rem;
+  color: white;
+}
+
+.scrollerWordItemActive {
+  opacity: 1;
+}
+
+.scrollerWordItemInactive {
+  opacity: 0.3;
+}
+
+@media (min-width: 768px) {
+  .scrollerWordItem {
+    font-size: 3rem;
+  }
+}
+
+.scrollerStickyImage {
+  position: sticky;
+  top: 0;
+  width: 100%;
+  height: 100vh;
+  z-index: 1;
+}
+
+.scrollerStickyImageContainer {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.scrollerImageLayer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.scrollerImageLayerActive {
+  opacity: 1;
+  z-index: 3;
+}
+
+.scrollerImageLayerInactive {
+  opacity: 0;
+  z-index: 1;
+}
+
+.scrollerStickyImageContainer::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 4;
+}
+
+.scrollerContentSection {
+  position: relative;
+  background: rgba(0, 0, 0, 0.3);
+  color: white;
+  padding: 2rem;
+} 

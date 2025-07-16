@@ -219,7 +219,7 @@ export default function Explorer({
       onPointerCancel={onPointerUp}
       onWheel={onWheel}
     >
-      <Director ref={trackRef} layout="horizontal 3 a gap paddingX" className={styles.track}>
+      <Director ref={trackRef} layout="horizontal 3 a gapX paddingX" className={styles.track}>
         {children}
       </Director>
     </div>

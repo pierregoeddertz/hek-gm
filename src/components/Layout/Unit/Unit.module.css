@@ -5,4 +5,10 @@
   align-items: center;
   justify-content: flex-start;
   overflow-x: hidden;
+}
+.clrd {
+  background: var(--clrd_a);
+}
+.clrl {
+  background: var(--clrl_a);
 } 
