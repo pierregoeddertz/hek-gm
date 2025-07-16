@@ -90,7 +90,19 @@ export default function Promoter() {
     content = <img className={styles.img} alt="Promoter Platzhalter" draggable={false} />;
   } else {
     const data = items[current];
-    content = (
+    const isVideo = /(\.mp4$|\.webm$|\.mov$)/i.test(data.image_url || '');
+    content = isVideo ? (
+      <video
+        className={styles.img + ' ' + (isVisible ? styles.visible : styles.hidden)}
+        src={data.image_url}
+        autoPlay
+        loop
+        muted
+        playsInline
+        style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }}
+        draggable={false}
+      />
+    ) : (
       <img
         className={
           styles.img +

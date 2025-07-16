@@ -26,7 +26,7 @@ const aspectRatioToNumber = {
 
 export default function Card({ image, aspectRatio = '16:9', title, time, date, className = '' }: CardProps) {
   const ratio = aspectRatioToNumber[aspectRatio] || aspectRatioToNumber['16:9'];
-  const width = 300;
+  const width = 250;
   const height = Math.round(width / ratio);
 
   return (
@@ -37,12 +37,24 @@ export default function Card({ image, aspectRatio = '16:9', title, time, date, c
         <span>{date}</span>
       </div>
       <h3 className={styles.title}>{title}</h3>
-      <div className={styles.imageWrapper} style={{ width: '100%', height }}>
-        <img
-          src={image}
-          alt={title}
-          style={{ width: '100%', height: '100%', objectFit: 'cover', position: 'absolute', inset: 0 }}
-        />
+      <div className={styles.imageWrapper} style={{ width: '100%', height, position: 'relative', overflow: 'hidden' }}>
+        {/**** Media-Type Detection ****/}
+        {/(\.mp4$|\.webm$|\.mov$)/i.test(image) ? (
+          <video
+            src={image}
+            autoPlay
+            loop
+            muted
+            playsInline
+            style={{ width: '100%', height: '100%', objectFit: 'cover', position: 'absolute', inset: 0 }}
+          />
+        ) : (
+          <img
+            src={image}
+            alt={title}
+            style={{ width: '100%', height: '100%', objectFit: 'cover', position: 'absolute', inset: 0 }}
+          />
+        )}
       </div>
     </div>
   );
