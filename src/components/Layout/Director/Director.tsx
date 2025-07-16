@@ -8,7 +8,7 @@ interface DirectorProps extends React.HTMLAttributes<HTMLDivElement> {
   className?: string;
   gapX?: boolean;
   gapY?: boolean;
-  [key: string]: any;
+  [key: string]: unknown;
 }
 
 const htmlElements = ['header', 'footer', 'article', 'section', 'nav', 'main', 'aside', 'ul', 'ol', 'li'];
@@ -23,26 +23,38 @@ const Director = forwardRef<HTMLDivElement, DirectorProps>(
     ...rest
   }, ref) => {
     // Erkenne semantisches HTML-Element über gleichnamiges Prop
-    let semanticElement: string | undefined = undefined;
-    const restAny = rest as any;
+    let semanticElement: string | React.ElementType | undefined = undefined;
+    const restObj = rest as { [key: string]: any };
     for (const el of htmlElements) {
-      if (restAny[el]) {
-        semanticElement = el;
-        delete restAny[el];
+      if (restObj[el]) {
+        // Type Guard: Stelle sicher, dass nur string verwendet wird
+        if (typeof restObj[el] === 'string') {
+          semanticElement = restObj[el] as string;
+        } else {
+          semanticElement = el;
+        }
+        delete restObj[el];
         break;
       }
     }
-    const DirectorComponent = as || semanticElement || 'div';
+    // Type Guard für semanticElement, falls es als string | undefined verwendet wird
+    const DirectorComponent = (as || (typeof semanticElement === 'string' ? semanticElement : 'div')) as React.ElementType;
 
     const parseLayout = (layoutString?: string) => {
       if (!layoutString || !layoutString.trim()) return { direction: 'vertical', align: 1, justify: 'b', widthMax: false, paddingX: false, paddingY: false, gapX: false, gapY: false, heightMin: false };
-      const parts = layoutString.trim().split(/\s+/);
+      const parts = layoutString.trim().split(/\s+/) as string[];
       // Direction
       const direction: 'vertical' | 'horizontal' = parts.includes('horizontal') ? 'horizontal' : 'vertical';
       // Align
-      const align: 1 | 2 | 3 = (parts.find((t) => ['1', '2', '3'].includes(t)) as unknown as 1 | 2 | 3) || 1;
+      const alignStr = parts.find((t) => ['1', '2', '3'].includes(t));
+      const align: 1 | 2 | 3 = alignStr ? (parseInt(alignStr, 10) as 1 | 2 | 3) : 1;
       // Justify
-      const justify: 'a' | 'b' | 'c' | 'd' = (parts.find((t) => ['a', 'b', 'c', 'd'].includes(t)) as 'a' | 'b' | 'c' | 'd') || 'b';
+      const justifyStr = parts.find((t) => ['a', 'b', 'c', 'd'].includes(t));
+      const allowedJustify = ['a', 'b', 'c', 'd'] as const;
+      let justify: 'a' | 'b' | 'c' | 'd' = 'b';
+      if (typeof justifyStr === 'string' && (allowedJustify as readonly string[]).includes(justifyStr)) {
+        justify = justifyStr as 'a' | 'b' | 'c' | 'd';
+      }
       const widthMax = parts.includes('widthMax');
       const paddingX = parts.includes('paddingX');
       const paddingY = parts.includes('paddingY');
@@ -52,7 +64,7 @@ const Director = forwardRef<HTMLDivElement, DirectorProps>(
       return { direction, align, justify, widthMax, paddingX, paddingY, gapX, gapY, heightMin };
     };
 
-    const { direction, align, justify, widthMax, paddingX, paddingY, gapX, gapY, heightMin } = parseLayout(layout);
+    const { direction, align, justify, widthMax, paddingX, paddingY, gapX, gapY, heightMin } = parseLayout(layout as string | undefined);
 
     const getFlexClasses = () => {
       const flexDirection = direction === 'vertical' ? styles.vertical : styles.horizontal;
@@ -84,8 +96,8 @@ const Director = forwardRef<HTMLDivElement, DirectorProps>(
     // Entferne Layout-Props und gapX/gapY aus rest
     const layoutProps = ['widthMax', 'paddingX', 'paddingY', 'gapX', 'gapY', 'heightMin'];
     layoutProps.forEach((prop) => {
-      if (prop in restAny) {
-        delete restAny[prop];
+      if (prop in restObj) {
+        delete restObj[prop];
       }
     });
 
@@ -94,12 +106,14 @@ const Director = forwardRef<HTMLDivElement, DirectorProps>(
         className={`${getContainerClasses()} ${getFlexClasses()} ${className}`}
         style={style}
         ref={ref}
-        {...rest}
+        {...(restObj as Record<string, any>)}
       >
         {children}
       </DirectorComponent>
     );
   }
 );
+
+Director.displayName = "Director";
 
 export default Director;
