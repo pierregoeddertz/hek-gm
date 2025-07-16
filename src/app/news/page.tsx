@@ -15,24 +15,6 @@ type NewsItem = {
   // ggf. weitere Felder
 };
 
-function LiveClock() {
-  const [now, setNow] = useState(new Date());
-  useEffect(() => {
-    const interval = setInterval(() => setNow(new Date()), 1000);
-    return () => clearInterval(interval);
-  }, []);
-  const hours = String(now.getHours()).padStart(2, '0');
-  const minutes = String(now.getMinutes()).padStart(2, '0');
-  const showColon = now.getSeconds() % 2 === 0;
-  return (
-    <span>
-      {hours}
-      <span style={{ opacity: showColon ? 1 : 0.3 }}>:</span>
-      {minutes}
-    </span>
-  );
-}
-
 export default function News() {
   const [news, setNews] = useState<NewsItem[]>([]);
   const [loading, setLoading] = useState(true);
