@@ -49,13 +49,10 @@ export default function Header({ right }: HeaderProps) {
     const units = Array.from(document.querySelectorAll('[data-colorreverse]')) as HTMLElement[];
     const headerRect = header.getBoundingClientRect();
     const switchLine = headerRect.top + headerRect.height / 2;
-    let unit: HTMLElement | undefined;
-    
-    unit = units.find(u => {
+    const unit = units.find(u => {
       const rect = u.getBoundingClientRect();
       return rect.top <= switchLine && rect.bottom > switchLine;
     });
-    
     setColorReverse(!!unit);
   }, []);
 
