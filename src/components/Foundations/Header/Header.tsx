@@ -28,15 +28,12 @@ export default function Header({ right }: HeaderProps) {
     const units = Array.from(document.querySelectorAll('[data-color]')) as HTMLElement[];
     const headerRect = header.getBoundingClientRect();
     const switchLine = headerRect.top + headerRect.height / 2;
-    let unit: HTMLElement | undefined;
-    if (window.scrollY === 0 && units.length > 0) {
-      unit = units[0];
-    } else {
-      unit = units.find(u => {
-        const rect = u.getBoundingClientRect();
-        return rect.top <= switchLine && rect.bottom > switchLine;
-      });
-    }
+    const unit = (window.scrollY === 0 && units.length > 0)
+      ? units[0]
+      : units.find(u => {
+          const rect = u.getBoundingClientRect();
+          return rect.top <= switchLine && rect.bottom > switchLine;
+        });
     let ctx: 'colorD' | 'colorL' | undefined = undefined;
     if (unit) {
       const bg = unit.getAttribute('data-color');
