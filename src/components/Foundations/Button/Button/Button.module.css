@@ -1,9 +1,8 @@
-.root {
-  color: var(--z);
+.core {
   cursor: pointer;
 }
 
-.root:hover,
+.core:hover,
 .root:focus-visible {
   opacity: .33;
 }

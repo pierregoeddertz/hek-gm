@@ -4,6 +4,8 @@ import { useState, useEffect } from 'react';
 import { NewsService } from '@/lib/services/news';
 import Director from '@/components/Layout/Director';
 import styles from './Promoter.module.css';
+import Button from '@/components/Foundations/Button/Button';
+import Headline from '@/components/Foundations/Headline';
 
 export interface PromoterItem {
   id: string;
@@ -87,13 +89,13 @@ export default function Promoter() {
 
   let content = null;
   if (items.length === 0 || isLoading) {
-    content = <img className={styles.img} alt="Promoter Platzhalter" draggable={false} />;
+    content = <img className={styles.media} alt="Promoter Platzhalter" draggable={false} />;
   } else {
     const data = items[current];
     const isVideo = /(\.mp4$|\.webm$|\.mov$)/i.test(data.image_url || '');
     content = isVideo ? (
       <video
-        className={styles.img + ' ' + (isVisible ? styles.visible : styles.hidden)}
+        className={styles.media + ' ' + (isVisible ? styles.visible : styles.hidden)}
         src={data.image_url}
         autoPlay
         loop
@@ -105,7 +107,7 @@ export default function Promoter() {
     ) : (
       <img
         className={
-          styles.img +
+          styles.media +
           ' ' +
           (isVisible ? styles.visible : styles.hidden)
         }
@@ -117,8 +119,16 @@ export default function Promoter() {
   }
 
   return (
-    <Director layout="vertical 2 b" className={styles.container}>
+    <Director identity="vertical 2 b" className={styles.core}>
+      <Director identity="vertical 2 c heightFill paddingHeader" className={styles.verbal}>
+        <Headline
+          text={items[current]?.title || ''}
+          level="h1"
+          className={styles.headlineFade + ' ' + (isVisible ? styles.visible : styles.hidden)}
+        />
+        <Button text="Button 1" />
+      </Director>
       {content}
     </Director>
   );
-} 
+}

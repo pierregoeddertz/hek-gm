@@ -1,48 +1,52 @@
 :root {
-  /* Utilities */
-  --wgt: 300;
-
-  /* Animations */
-  --anm:750ms cubic-bezier(0.8, 0, 0.25, 1);
-
-  /* Mins & Maxes 320px !das prüfen! */
   --min_1: 200px;
-
   --max_1: 1200px;
   --max_2: 600px;
   --max_3: 400px;
+  --wgt: 300;
+  --anm:750ms cubic-bezier(0.8, 0, 0.25, 1);
 
-  /* Values */
-  --vlu_x: 24px;
-  --vlu_y: 18px;
+  --vlu_x: 1.5rem;
 
-  /* Colors, light */
-  --clrl_a: #ffffff;
-  --clrl_m: #17171712;
-  --clrl_z: #171717;
+  --vlu_z: 12rem;
 
-   /* Colors, dark */
-  --clrd_a: #000000;
-  --clrd_m: #f5f5f521;
-  --clrd_z: #f5f5f5;
+  --vlu_y: 1rem;
 
-  /* Colors, dynamic - light */
-  --clr_a: #ffffff;
-  --clr_m: #17171712;
-  --clr_z: #171717;
-  --clr_b: #FF4D19;
+  --clrL_a: #ffffff;
+  --clrL_m: #17171715;
+  --clrL_z: #171717;
+  --clrL_b: #FF4D19;
+
+  --clrD_a: #000000;
+  --clrD_m: #f5f5f521;
+  --clrD_z: #f5f5f5;
+
+  --clrA_a: var(--clrL_a);
+  --clrA_m: var(--clrL_m);
+  --clrA_z: var(--clrL_z);
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    /* Colors, dynamic - dark */
-    --clr_a: #000000;
-    --clr_m: #f5f5f521;
-    --clr_z: #f5f5f5;
+    --clrA_a: var(--clrD_a);
+    --clrA_m: var(--clrD_m);
+    --clrA_z: var(--clrD_z);
   }
 }
 
-/* Reset */
+[data-applycolorreverse] {
+  --clrL_a: var(--clrD_a);
+  --clrL_m: var(--clrD_m);
+  --clrL_z: var(--clrD_z);
+}
+
+[data-applycolorreverse] button {
+  color: var(--clrL_z);
+}
+[data-applycolorreverse] svg, [data-applycolorreverse] [stroke] {
+  stroke: var(--clrL_m);
+}
+
 *,
 *::before,
 *::after {
@@ -58,7 +62,7 @@
   font-weight: var(--wgt);
   font-size: 15px;
   letter-spacing: .33px;
-  line-height: 175%;
+  line-height: 1.75rem;
   text-align: left;
   text-transform: none;
   text-indent: 0;
@@ -74,10 +78,8 @@
   margin-inline-end: 0;
 }
 
-/* Element stylings */
 body {
-  background: var(--clr_a);
-  color: var(--clr_z);
+  background: var(--clrA_a);
 }
 
 main {

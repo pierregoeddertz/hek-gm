@@ -1,9 +1,21 @@
-.container {
+.core {
   width: 100%;
+}
+
+.colorD {
+  background-color: var(--clrD_a);
+}
+
+.colorL {
+  background-color: var(--clrL_a);
 }
 
 .heightMin {
   min-height: 100vh;
+}
+
+.heightFill {
+  height: 100%;
 }
 
 .widthMax {
@@ -63,4 +75,16 @@
 
 .justifySpaceBetween {
   justify-content: space-between;
+}
+
+.paddingHeader {
+  padding-bottom: var(--hgt_header);
+}
+
+.spacingTop {
+  padding-top: var(--vlu_z);
+}
+
+.spacingBottom {
+  padding-bottom: var(--vlu_z);
 }

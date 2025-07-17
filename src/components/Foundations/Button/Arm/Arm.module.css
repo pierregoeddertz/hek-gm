@@ -1,6 +1,7 @@
 .row {
   display: flex;
   gap: 12px;
+  color: var(--clrA_a);
   width: 100%;
   min-width: var(--min_1);
   max-width: var(--max_3);

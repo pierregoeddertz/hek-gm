@@ -14,24 +14,24 @@ function isExternal(href: string) {
 }
 
 const Button = forwardRef<HTMLButtonElement, ButtonProps>(
-  ({ text, href, ...rest }, ref) => {
+  ({ text, href, style, ...rest }, ref) => {
     if (!href) {
       return (
-        <button ref={ref} type="button" {...rest} className={styles.root}>
+        <button ref={ref} type="button" {...rest} className={styles.core} style={style}>
           {text}
         </button>
       );
     }
     if (isExternal(href)) {
       return (
-        <a href={href} className={styles.root} target="_blank" rel="noopener noreferrer">
+        <a href={href} className={styles.core} target="_blank" rel="noopener noreferrer" style={style}>
           {text}
         </a>
       );
     }
     // Default: interner Link
     return (
-      <Link href={href} className={styles.root}>
+      <Link href={href} className={styles.core} style={style}>
         {text}
       </Link>
     );
