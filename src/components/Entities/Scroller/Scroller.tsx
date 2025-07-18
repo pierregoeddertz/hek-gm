@@ -64,26 +64,30 @@ export default function Scroller() {
   } else {
     const idx = activeLi !== null ? activeLi : 0;
     const data = items[idx];
-    const isVideo = /\.(mp4|webm|mov)$/i.test(data.image_url || '');
-    content = isVideo ? (
-      <video
-        className={styles.media}
-        src={data.image_url}
-        autoPlay
-        loop
-        muted
-        playsInline
-        style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }}
-        draggable={false}
-      />
-    ) : (
-      <img
-        className={styles.media}
-        src={data.image_url}
-        alt={data.title || 'Scroller Slide'}
-        draggable={false}
-      />
-    );
+    if (!data) {
+      content = null;
+    } else {
+      const isVideo = /\.(mp4|webm|mov)$/i.test(data.image_url || '');
+      content = isVideo ? (
+        <video
+          className={styles.media}
+          src={data.image_url}
+          autoPlay
+          loop
+          muted
+          playsInline
+          style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }}
+          draggable={false}
+        />
+      ) : (
+        <img
+          className={styles.media}
+          src={data.image_url}
+          alt={data.title || 'Scroller Slide'}
+          draggable={false}
+        />
+      );
+    }
   }
 
   return (
