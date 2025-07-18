@@ -6,7 +6,6 @@ import Director from '@/components/Layout/Director';
 import styles from './Promoter.module.css';
 import Button from '@/components/Foundations/Button/Button';
 import Headline from '@/components/Foundations/Headline';
-import Image from 'next/image';
 
 export interface PromoterItem {
   id: string;

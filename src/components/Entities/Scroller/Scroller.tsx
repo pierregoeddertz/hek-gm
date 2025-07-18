@@ -4,7 +4,6 @@ import { useState, useEffect, useRef } from 'react';
 import styles from './Scroller.module.css';
 import Director from '@/components/Layout/Director';
 import Accordion from '@/components/Entities/Accordion';
-import Image from 'next/image';
 
 export interface ScrollerItem {
   id: string;
