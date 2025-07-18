@@ -4,6 +4,7 @@ import React, { useEffect, useRef, useCallback, useState } from 'react';
 import styles from './Header.module.css';
 import Director from '@/components/Layout/Director';
 import Button from '@/components/Foundations/Button/Button';
+import GlobalPanel from '@/components/GlobalPanel';
 
 export type HeaderProps = {
   right?: React.ReactNode | null;
@@ -13,6 +14,7 @@ export default function Header({ right }: HeaderProps) {
   const headerRef = useRef<HTMLDivElement>(null);
   const [colorContext, setColorContext] = useState<'colorD' | 'colorL' | undefined>(undefined);
   const [colorReverse, setColorReverse] = useState(false);
+  const [panelOpen, setPanelOpen] = useState<false | 'menu' | 'contact'>(false);
 
   const updateHeaderHeight = useCallback(() => {
     const header = headerRef.current;
@@ -98,9 +100,14 @@ export default function Header({ right }: HeaderProps) {
         <line x1="0" y1="0.5" x2="100" y2="0.5" stroke={colorContext ? 'var(--clrA_m)' : 'var(--clrA_m)'} strokeWidth="1" />
       </svg>
       <Director identity="horizontal 2 d">
-        <Button text="Menü"/>
-        {right === null ? null : right !== undefined ? right : <Button text="Kontakt"/>}
+        <Button text="Menü" onClick={() => setPanelOpen('menu')} />
+        {right === null ? null : right !== undefined ? right : <Button text="Kontakt" onClick={() => setPanelOpen('contact')} />}
       </Director>
+      <GlobalPanel
+        type={panelOpen === 'menu' ? 'menu' : 'contact'}
+        isOpen={!!panelOpen}
+        onClose={() => setPanelOpen(false)}
+      />
     </Director>
   );
 } 

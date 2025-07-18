@@ -5,6 +5,14 @@ import styles from './Scroller.module.css';
 import Director from '@/components/Layout/Director';
 import Accordion from '@/components/Entities/Accordion';
 
+export interface AccordionDataType {
+  title: string;
+  subtitle?: string;
+  openLabel?: string;
+  closeLabel?: string;
+  content: React.ReactNode;
+}
+
 export interface ScrollerItem {
   id: string;
   image_url: string;
@@ -13,6 +21,10 @@ export interface ScrollerItem {
   content?: string;
   index?: string;
   label?: string;
+}
+
+interface ScrollerProps {
+  accordionData: AccordionDataType[];
 }
 
 const scrollerItems: ScrollerItem[] = [
@@ -24,10 +36,10 @@ const scrollerItems: ScrollerItem[] = [
   { id: '6', image_url: 'https://picsum.photos/seed/smarthome/1920/1080', title: 'Smart Home Headline', subtitle: 'Smart Home Subtext' },
 ];
 
-export default function Scroller() {
+export default function Scroller({ accordionData }: ScrollerProps) {
   const [current, setCurrent] = useState(0);
   const [isVisible, setIsVisible] = useState(false);
-  const [open, setOpen] = useState(false);
+  const [openStates, setOpenStates] = useState<boolean[]>(Array(accordionData.length).fill(false));
   const [items] = useState<ScrollerItem[]>(scrollerItems);
 
   useEffect(() => {
@@ -86,19 +98,28 @@ export default function Scroller() {
   return (
     <Director identity="vertical 2 a" className={styles.core}>
       {/* Sticky Hintergrundbild */}
-      <div style={{ position: 'sticky', top: 0, width: '100%', height: '100vh', zIndex: 0 }}>
+      <div style={{ position: 'sticky', top: 0, width: '100%', height: '100vh', zIndex: 0, overflow: 'hidden' }}>
         {content}
       </div>
       <Director identity="vertical 1 a heightFill widthMax paddingX spacingTop spacingBottom" className={styles.verbal} style={{ marginTop:'-100vh' }}>
-        <Accordion
-          title={'Überschrift'}
-          subtitle='Überschrift'
-          open={open}
-          openLabel="Mehr erfahren"
-          closeLabel="Weniger anzeigen"
-          onClick={() => setOpen((prev) => !prev)}
-        >
-        </Accordion>
+        {/* Dynamische Accordions */}
+        {accordionData.map((item, i) => (
+          <Accordion
+            key={i}
+            title={item.title}
+            subtitle={item.subtitle}
+            open={openStates[i]}
+            openLabel={item.openLabel ?? 'Mehr anzeigen'}
+            closeLabel={item.closeLabel ?? 'Weniger anzeigen'}
+            onClick={() => setOpenStates(states => {
+              const copy = [...states];
+              copy[i] = !copy[i];
+              return copy;
+            })}
+          >
+            {item.content}
+          </Accordion>
+        ))}
         {/* Drei Listen mit Überschrift */}
         <Director identity="vertical 1 a widthMax spacingTop" style={{ gap: 'var(--vlu_z)' }}>
           <Director as="ol" identity="vertical 1 a" style={{ gap: '.5rem' }}>

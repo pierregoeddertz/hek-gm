@@ -26,8 +26,8 @@ export default function Home() {
       closeLabel: "Zurück",
       content: (
         <div>
-          <p>Seit 1986 steht die HEK Gebäudemanagement GmbH für Kompetenz im Bereich der technischen Gebäudeplanung. Wir sind Ihr Ansprechpartner für Heizung, Klima-, Lüftungs- und Elektrotechnik. Was uns auszeichnet? Wir vereinen traditionelles Handwerk mit zukunftsweisenden Innovationen.<br /><br />
-          Als Ihr Partner installieren, warten und reparieren wir nicht nur klassische Gewerke, sondern bieten Ihnen vor allem nachhaltige und energieeffiziente Lösungen, die Maßstäbe setzen. Wir verstehen uns als Ihr Problemlöser, fokussieren unter Berücksichtigung innovativer Ansätze stets das optimale Ergebnis und betreuen Sie durch den gesamten Prozess hinweg auf Augenhöhe.<br /><br />
+          <p>HEK steht seit über 40 Jahren als Garant für Sicherheit und Zuverlässigkeit in der Beratung, Planung, Installation und Wartung von moderner technischer Gebäudeausrüstung. Innovativ, vielseitig und umweltorientiert bietet HEK maßgeschneiderte Lösungen, Planung, Montage, Instandhaltung und Wartung aus den Gewerken Heizung, Elektro, Kälte, Klima, Lüftung und Sanitär an. Kurz: Die komplette Haustechnik aus einer Hand- das ist HEK.<br /><br />
+          Selbstverständlich ist HEK auch Mitglied der Handwerkskammern, erfolgreicher Ausbildungsbetrieb und autorisierter Kundendienstbetrieb vieler namhafter Marktanbieter<br /><br />
           Nutzen Sie unsere jahrzehntelange Branchenerfahrung als Fundament für Ihr Bauprojekt!</p>
         </div>
       )
@@ -125,7 +125,7 @@ export default function Home() {
       </Explorer>
       </Unit>
       <Unit overflowVisible identity="colorD">
-        <Scroller />
+        <Scroller accordionData={[accordionData[2]]} />
       </Unit>
       <Unit identity="vertical 1 a widthMax paddingX spacingTop">
         {/* Erstes Accordion oben */}
