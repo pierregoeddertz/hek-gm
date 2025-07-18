@@ -1,6 +1,8 @@
 .core {
   width: 100%;
+  height: 100vh;
   position: relative;
+  overflow: hidden;
 }
 
 .media {
@@ -8,12 +10,36 @@
   height: 100%;
   object-fit: cover;
   object-position: center;
+  transition: opacity var(--anm), transform var(--anm);
+  transform: scale(1.1);
   display: block;
   position: absolute;
+}
+
+.visible {
   opacity: .33;
+  transform: scale(1.0);
+}
+
+.hidden {
+  opacity: 0;
+  transform: scale(1.1);
+  transition: none;
 }
 
 .verbal {
   position: relative;
   z-index: 1;
+}
+
+.headlineFade {
+  transition: opacity var(--anm);
+  opacity: 0;
+  transform: none !important;
+}
+.headlineFade.visible {
+  opacity: 1;
+}
+.headlineFade.hidden {
+  opacity: 0;
 } 

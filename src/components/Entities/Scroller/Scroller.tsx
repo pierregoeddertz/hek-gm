@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 import styles from './Scroller.module.css';
 import Director from '@/components/Layout/Director';
 import Accordion from '@/components/Entities/Accordion';
@@ -25,68 +25,62 @@ const scrollerItems: ScrollerItem[] = [
 ];
 
 export default function Scroller() {
-  const [items] = useState<ScrollerItem[]>(scrollerItems);
+  const [current, setCurrent] = useState(0);
+  const [isVisible, setIsVisible] = useState(false);
   const [open, setOpen] = useState(false);
-  const [activeLi, setActiveLi] = useState<number | null>(null);
-  const liRefs = useRef<(HTMLLIElement | null)[]>([]);
+  const [items] = useState<ScrollerItem[]>(scrollerItems);
 
   useEffect(() => {
-    setOpen(false); // Accordion schließt sich beim Slide-Wechsel
-  }, [activeLi]);
+    if (items.length > 0) {
+      setIsVisible(true);
+    }
+  }, [items.length]);
 
   useEffect(() => {
-    const onScroll = () => {
-      const center = window.innerHeight / 2;
-      let minDist = Infinity;
-      let active: number | null = null;
-      liRefs.current.forEach((el, idx) => {
-        if (el) {
-          const rect = el.getBoundingClientRect();
-          const elCenter = rect.top + rect.height / 2;
-          const dist = Math.abs(center - elCenter);
-          if (dist < minDist) {
-            minDist = dist;
-            active = idx;
-          }
-        }
-      });
-      setActiveLi(active);
+    if (items.length <= 1) {
+      setIsVisible(false);
+      setTimeout(() => setIsVisible(true), 50);
+      return;
+    }
+    setIsVisible(false);
+    const fadeInTimeout = setTimeout(() => setIsVisible(true), 50);
+    const holdDuration = 5000;
+    const totalDuration = holdDuration + 750;
+    const nextTimeout = setTimeout(() => {
+      setIsVisible(false);
+      setCurrent((p) => (p + 1) % items.length);
+    }, totalDuration);
+    return () => {
+      clearTimeout(fadeInTimeout);
+      clearTimeout(nextTimeout);
     };
-    window.addEventListener('scroll', onScroll);
-    onScroll();
-    return () => window.removeEventListener('scroll', onScroll);
-  }, []);
+  }, [current, items.length]);
 
   let content = null;
   if (items.length === 0) {
     content = null;
   } else {
-    const idx = activeLi !== null ? activeLi : 0;
-    const data = items[idx];
-    if (!data) {
-      content = null;
-    } else {
-      const isVideo = /\.(mp4|webm|mov)$/i.test(data.image_url || '');
-      content = isVideo ? (
-        <video
-          className={styles.media}
-          src={data.image_url}
-          autoPlay
-          loop
-          muted
-          playsInline
-          style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }}
-          draggable={false}
-        />
-      ) : (
-        <img
-          className={styles.media}
-          src={data.image_url}
-          alt={data.title || 'Scroller Slide'}
-          draggable={false}
-        />
-      );
-    }
+    const data = items[current];
+    const isVideo = /\.(mp4|webm|mov)$/i.test(data.image_url || '');
+    content = isVideo ? (
+      <video
+        className={styles.media + ' ' + (isVisible ? styles.visible : styles.hidden)}
+        src={data.image_url}
+        autoPlay
+        loop
+        muted
+        playsInline
+        style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }}
+        draggable={false}
+      />
+    ) : (
+      <img
+        className={styles.media + ' ' + (isVisible ? styles.visible : styles.hidden)}
+        src={data.image_url}
+        alt={data.title || 'Scroller Slide'}
+        draggable={false}
+      />
+    );
   }
 
   return (
@@ -108,26 +102,26 @@ export default function Scroller() {
         {/* Drei Listen mit Überschrift */}
         <Director identity="vertical 1 a widthMax spacingTop" style={{ gap: 'var(--vlu_z)' }}>
           <Director as="ol" identity="vertical 1 a" style={{ gap: '.5rem' }}>
-            <h4 style={{ marginBottom: '1.5rem', opacity: [0,1,2,3,4].includes(activeLi ?? -1) ? 1 : 0.33 }}>Mess-, Steuerungs-, Regelungs- & Elektrotechnik</h4>
-            <li ref={el => { liRefs.current[0] = el; }} className="fontLarge" style={{ opacity: activeLi === 0 ? 1 : 0.33 }}>Opel</li>
-            <li ref={el => { liRefs.current[1] = el; }} className="fontLarge" style={{ opacity: activeLi === 1 ? 1 : 0.33 }}>Amazon Zentrallager</li>
-            <li ref={el => { liRefs.current[2] = el; }} className="fontLarge" style={{ opacity: activeLi === 2 ? 1 : 0.33 }}>The Squaire</li>
-            <li ref={el => { liRefs.current[3] = el; }} className="fontLarge" style={{ opacity: activeLi === 3 ? 1 : 0.33 }}>Winx</li>
-            <li ref={el => { liRefs.current[4] = el; }} className="fontLarge" style={{ opacity: activeLi === 4 ? 1 : 0.33 }}>Grand Tower</li>
+            <h4 style={{ marginBottom: '1.5rem' }}>Mess-, Steuerungs-, Regelungs- & Elektrotechnik</h4>
+            <li className="fontLarge">Opel</li>
+            <li className="fontLarge">Amazon Zentrallager</li>
+            <li className="fontLarge">The Squaire</li>
+            <li className="fontLarge">Winx</li>
+            <li className="fontLarge">Grand Tower</li>
           </Director>
           <Director as="ol" identity="vertical 1 a" style={{ gap: '.5rem' }}>
-            <h4 style={{ marginBottom: '1.5rem', opacity: [5,6,7,8].includes(activeLi ?? -1) ? 1 : 0.33 }}>Kälte-, Klima- & Lüftungstechnik</h4>
-            <li ref={el => { liRefs.current[5] = el; }} className="fontLarge" style={{ opacity: activeLi === 5 ? 1 : 0.33 }}>Porsche Museum</li>
-            <li ref={el => { liRefs.current[6] = el; }} className="fontLarge" style={{ opacity: activeLi === 6 ? 1 : 0.33 }}>Ostbahnhof</li>
-            <li ref={el => { liRefs.current[7] = el; }} className="fontLarge" style={{ opacity: activeLi === 7 ? 1 : 0.33 }}>Courtyard bei Marriott Hotel</li>
-            <li ref={el => { liRefs.current[8] = el; }} className="fontLarge" style={{ opacity: activeLi === 8 ? 1 : 0.33 }}>Deutsche Bahn</li>
+            <h4 style={{ marginBottom: '1.5rem' }}>Kälte-, Klima- & Lüftungstechnik</h4>
+            <li className="fontLarge">Porsche Museum</li>
+            <li className="fontLarge">Ostbahnhof</li>
+            <li className="fontLarge">Courtyard bei Marriott Hotel</li>
+            <li className="fontLarge">Deutsche Bahn</li>
           </Director>
           <Director as="ol" identity="vertical 1 a" style={{ gap: '.5rem' }}>
-            <h4 style={{ marginBottom: '1.5rem', opacity: [9,10,11,12].includes(activeLi ?? -1) ? 1 : 0.33 }}>TGA-Planung & Projektleitung</h4>
-            <li ref={el => { liRefs.current[9] = el; }} className="fontLarge" style={{ opacity: activeLi === 9 ? 1 : 0.33 }}>Flughafen BER</li>
-            <li ref={el => { liRefs.current[10] = el; }} className="fontLarge" style={{ opacity: activeLi === 10 ? 1 : 0.33 }}>Europa Passage</li>
-            <li ref={el => { liRefs.current[11] = el; }} className="fontLarge" style={{ opacity: activeLi === 11 ? 1 : 0.33 }}>Four</li>
-            <li ref={el => { liRefs.current[12] = el; }} className="fontLarge" style={{ opacity: activeLi === 12 ? 1 : 0.33 }}>DFB Zentrale</li>
+            <h4 style={{ marginBottom: '1.5rem' }}>TGA-Planung & Projektleitung</h4>
+            <li className="fontLarge">Flughafen BER</li>
+            <li className="fontLarge">Europa Passage</li>
+            <li className="fontLarge">Four</li>
+            <li className="fontLarge">DFB Zentrale</li>
           </Director>
         </Director>
       </Director>
