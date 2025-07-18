@@ -90,7 +90,7 @@ export default function Promoter() {
 
   let content = null;
   if (items.length === 0 || isLoading) {
-    content = <Image className={styles.media} alt="Promoter Platzhalter" draggable={false} src="/vercel.svg" width={400} height={225} />;
+    content = null;
   } else {
     const data = items[current];
     const isVideo = /(\.mp4$|\.webm$|\.mov$)/i.test(data.image_url || '');

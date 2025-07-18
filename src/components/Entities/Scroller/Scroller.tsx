@@ -60,34 +60,30 @@ export default function Scroller() {
 
   let content = null;
   if (items.length === 0) {
-    content = <Image className={styles.media} alt="Scroller Platzhalter" draggable={false} src="/vercel.svg" width={400} height={225} />;
+    content = null;
   } else {
     const idx = activeLi !== null ? activeLi : 0;
     const data = items[idx];
-    if (!data) {
-      content = <img className={styles.media} alt="Scroller Platzhalter" draggable={false} />;
-    } else {
-      const isVideo = /(\.mp4$|\.webm$|\.mov$)/i.test(data.image_url || '');
-      content = isVideo ? (
-        <video
-          className={styles.media}
-          src={data.image_url}
-          autoPlay
-          loop
-          muted
-          playsInline
-          style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }}
-          draggable={false}
-        />
-      ) : (
-        <img
-          className={styles.media}
-          src={data.image_url}
-          alt={data.title || 'Scroller Slide'}
-          draggable={false}
-        />
-      );
-    }
+    const isVideo = /\.(mp4|webm|mov)$/i.test(data.image_url || '');
+    content = isVideo ? (
+      <video
+        className={styles.media}
+        src={data.image_url}
+        autoPlay
+        loop
+        muted
+        playsInline
+        style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }}
+        draggable={false}
+      />
+    ) : (
+      <img
+        className={styles.media}
+        src={data.image_url}
+        alt={data.title || 'Scroller Slide'}
+        draggable={false}
+      />
+    );
   }
 
   return (
