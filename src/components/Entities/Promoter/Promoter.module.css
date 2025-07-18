@@ -17,7 +17,7 @@
 }
 
 .visible {
-  opacity: .5;
+  opacity: .33;
   transform: scale(1.0);
 }
 
@@ -35,6 +35,7 @@
 .headlineFade {
   transition: opacity var(--anm);
   opacity: 0;
+  transform: none !important;
 }
 .headlineFade.visible {
   opacity: 1;

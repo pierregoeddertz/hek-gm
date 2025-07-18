@@ -2,6 +2,7 @@
 
 import { Unit, Explorer } from '@/components/Layout/Unit';
 import Card from '@/components/Foundations/Card';
+import Headline from '@/components/Foundations/Headline';
 // import Header from '@/components/Foundations/Header'; // Entfernt
 import { useEffect, useState } from 'react';
 import { NewsService } from '@/lib/services/news';
@@ -15,7 +16,7 @@ type NewsItem = {
   // ggf. weitere Felder
 };
 
-export default function News() {
+export default function NewsPage() {
   const [news, setNews] = useState<NewsItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -29,6 +30,7 @@ export default function News() {
 
   return (
     <main>
+      <Headline level="h1" text="Ich bin die Seitenüberschrift" />
       <Unit identity="vertical 2 c heightMin widthMax paddingHeader">
         {error && <div>Fehler: {error}</div>}
         {loading && <div>Lädt…</div>}

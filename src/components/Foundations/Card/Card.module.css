@@ -1,19 +1,14 @@
 .root {
   display: flex;
   flex-direction: column;
-  gap: var(--v_1_5, 8px);
+  gap: .5rem;
   width: 275px;
   flex-shrink: 0;
 }
 
 .meta {
-  color: var(--z, currentColor);
   display: flex;
-  gap: 0.5ch;
-}
-
-.title {
-  margin: 0;
+  gap: 0.5rem;
 }
 
 .imageWrapper {

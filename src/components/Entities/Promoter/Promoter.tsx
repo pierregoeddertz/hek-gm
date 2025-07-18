@@ -120,13 +120,14 @@ export default function Promoter() {
 
   return (
     <Director identity="vertical 2 b" className={styles.core}>
-      <Director identity="vertical 2 c heightFill paddingHeader" className={styles.verbal}>
+      <Director identity="vertical 2 c heightFill paddingHeader widthMax2 paddingX" className={styles.verbal}>
         <Headline
           text={items[current]?.title || ''}
-          level="h1"
+          subText={items[current]?.subtitle || ''}
+          button={<Button text="Mehr erfahren" />}
+          textAlign='2'
           className={styles.headlineFade + ' ' + (isVisible ? styles.visible : styles.hidden)}
         />
-        <Button text="Button 1" />
       </Director>
       {content}
     </Director>

@@ -22,6 +22,10 @@
   max-width: var(--max_1);
 }
 
+.widthMax2 {
+  max-width: var(--max_2);
+}
+
 .paddingX {
   padding-left: var(--vlu_x);
   padding-right: var(--vlu_x);

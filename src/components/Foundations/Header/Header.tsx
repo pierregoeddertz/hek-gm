@@ -18,7 +18,8 @@ export default function Header({ right }: HeaderProps) {
     const header = headerRef.current;
     if (header) {
       const height = header.offsetHeight;
-      document.documentElement.style.setProperty('--hgt_header', `${height}px`);
+      const extra = height * 0.12;
+      document.documentElement.style.setProperty('--hgt_header', `${height + extra}px`);
     }
   }, []);
 
@@ -97,8 +98,8 @@ export default function Header({ right }: HeaderProps) {
         <line x1="0" y1="0.5" x2="100" y2="0.5" stroke={colorContext ? 'var(--clrA_m)' : 'var(--clrA_m)'} strokeWidth="1" />
       </svg>
       <Director identity="horizontal 2 d">
-        <Button text="Button 1" />
-        {right === null ? null : right !== undefined ? right : <Button text="Button 2" />}
+        <Button text="Menü"/>
+        {right === null ? null : right !== undefined ? right : <Button text="Kontakt"/>}
       </Director>
     </Director>
   );

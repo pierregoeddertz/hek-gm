@@ -4,12 +4,14 @@ import styles from './Unit.module.css';
 
 interface UnitProps extends React.ComponentProps<typeof Director> {
   children: React.ReactNode;
+  overflowVisible?: boolean;
 }
 
 export default function Unit({
   children,
   className,
   identity,
+  overflowVisible,
   ...rest
 }: UnitProps) {
   // Extrahiere colorD und colorL aus identity
@@ -29,6 +31,7 @@ export default function Unit({
       identity={firstIdentity}
       data-colorreverse={isColorD ? true : undefined}
       data-applycolorreverse={isColorD ? true : undefined}
+      style={overflowVisible ? { overflowX: 'visible' } : undefined}
     >
       <Director
         identity={secondIdentity}

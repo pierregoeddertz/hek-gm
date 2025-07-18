@@ -1,8 +1,17 @@
 .core {
   cursor: pointer;
+  border-bottom: none;
+}
+
+.noUnderline {
+  border-bottom: none !important;
+}
+
+.underline {
+  border-bottom: 1px solid var(--clrA_m);
 }
 
 .core:hover,
-.root:focus-visible {
+.core:focus {
   opacity: .33;
 }

@@ -10,7 +10,7 @@ interface DirectorProps extends React.HTMLAttributes<HTMLDivElement> {
 }
 
 const parseIdentity = (identity?: string) => {
-  if (!identity || !identity.trim()) return { direction: 'vertical', align: 2, justify: 'a', widthMax: false, paddingX: false, paddingY: false, gapX: false, gapY: false, heightMin: false, heightFill: false, paddingHeader: false };
+  if (!identity || !identity.trim()) return { direction: 'vertical', align: 2, justify: 'a', widthMax: false, widthMax2: false, paddingX: false, paddingY: false, gapX: false, gapY: false, heightMin: false, heightFill: false, paddingHeader: false };
   const parts = identity.trim().split(/\s+/) as string[];
   const direction: 'vertical' | 'horizontal' = parts.includes('horizontal') ? 'horizontal' : 'vertical';
   const alignStr = parts.find((t) => ['1', '2', '3'].includes(t));
@@ -22,6 +22,7 @@ const parseIdentity = (identity?: string) => {
     justify = justifyStr as 'a' | 'b' | 'c' | 'd';
   }
   const widthMax = parts.includes('widthMax');
+  const widthMax2 = parts.includes('widthMax2');
   const paddingX = parts.includes('paddingX');
   const paddingY = parts.includes('paddingY');
   const gapX = parts.includes('gapX');
@@ -29,12 +30,12 @@ const parseIdentity = (identity?: string) => {
   const heightMin = parts.includes('heightMin');
   const heightFill = parts.includes('heightFill');
   const paddingHeader = parts.includes('paddingHeader');
-  return { direction, align, justify, widthMax, paddingX, paddingY, gapX, gapY, heightMin, heightFill, paddingHeader };
+  return { direction, align, justify, widthMax, widthMax2, paddingX, paddingY, gapX, gapY, heightMin, heightFill, paddingHeader };
 };
 
 const Director = forwardRef<HTMLElement, DirectorProps>(
   ({ children, identity, className = '', style, as = 'div', ...rest }, ref) => {
-    const { direction, align, justify, widthMax, paddingX, paddingY, gapX, gapY, heightMin, heightFill, paddingHeader } = parseIdentity(identity);
+    const { direction, align, justify, widthMax, widthMax2, paddingX, paddingY, gapX, gapY, heightMin, heightFill, paddingHeader } = parseIdentity(identity);
 
     const flexClasses = useMemo(() => {
       const flexDirection = direction === 'vertical' ? styles.vertical : styles.horizontal;
@@ -58,6 +59,7 @@ const Director = forwardRef<HTMLElement, DirectorProps>(
       styles.core,
       colorClass,
       widthMax && styles.widthMax,
+      widthMax2 && styles.widthMax2,
       paddingX && styles.paddingX,
       paddingY && styles.paddingY,
       gapX && styles.gapX,
@@ -66,7 +68,7 @@ const Director = forwardRef<HTMLElement, DirectorProps>(
       heightFill && styles.heightFill,
       paddingHeader && styles.paddingHeader,
       className
-    ), [colorClass, widthMax, paddingX, paddingY, gapX, gapY, heightMin, heightFill, paddingHeader, className]);
+    ), [colorClass, widthMax, widthMax2, paddingX, paddingY, gapX, gapY, heightMin, heightFill, paddingHeader, className]);
 
     // Immer data-colorreverse bei colorD, aber data-applycolorreverse nur wenn explizit als Prop
     const { 'data-applycolorreverse': dataApplyColorReverseProp, ...restProps } = rest as { 'data-applycolorreverse'?: boolean; [key: string]: unknown };

@@ -1,7 +1,7 @@
 'use client';
 
 import styles from "./Arm.module.css";
-import { useRef, useCallback, useEffect, ReactNode } from "react";
+import { useRef, useCallback, useEffect, ReactNode, forwardRef } from "react";
 import Button from "../Button/Button";
 
 export type ArmProps = {
@@ -15,9 +15,10 @@ export type ArmProps = {
   className?: string;
   onClick?: () => void;
   href?: string;
+  style?: React.CSSProperties;
 };
 
-export default function Arm({
+const Arm = forwardRef<HTMLDivElement, ArmProps>(function Arm({
   direction = "up",
   side = "left",
   openLabel,
@@ -27,7 +28,8 @@ export default function Arm({
   children,
   onClick,
   href,
-}: ArmProps) {
+  style,
+}, ref) {
   const vectorRef = useRef<HTMLDivElement>(null);
   const pathRef = useRef<SVGPathElement>(null);
 
@@ -50,7 +52,6 @@ export default function Arm({
           : `M0 ${KINK} L${w - KINK} ${KINK} L${w - 1} 0`;
     }
     pathEl.setAttribute("d", d);
-    pathEl.setAttribute("stroke", "var(--clr_m)");
   }, [direction, side]);
 
   useEffect(() => {
@@ -65,10 +66,10 @@ export default function Arm({
   const rowClasses = `${styles.row} ${side === "right" ? styles.right : ""}`.trim();
 
   return (
-    <div className={rowClasses} data-direction={direction} data-side={side}>
-      <div className={styles.vector} ref={vectorRef}>
-        <svg xmlns="http://www.w3.org/2000/svg" style={{ color: 'var(--clr_m)' }}>
-          <path ref={pathRef} stroke="currentColor" strokeWidth="1" strokeLinecap="butt" fill="none" />
+    <div ref={ref} className={rowClasses} data-direction={direction} data-side={side} style={style}>
+      <div className={styles.vector} ref={vectorRef} >
+        <svg xmlns="http://www.w3.org/2000/svg">
+          <path ref={pathRef} stroke="var(--clrA_m)" strokeWidth="1" strokeLinecap="butt" fill="none" />
         </svg>
       </div>
       <div className={styles.btnContainer}>
@@ -87,4 +88,5 @@ export default function Arm({
       </div>
     </div>
   );
-} 
+});
+export default Arm;

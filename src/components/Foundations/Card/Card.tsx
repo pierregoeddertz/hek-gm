@@ -32,11 +32,11 @@ export default function Card({ image, aspectRatio = '16:9', title, time, date, c
   return (
     <div className={`${styles.root} ${className}`.trim()} style={{ width }}>
       <div className={styles.meta}>
-        <span>{time}</span>
-        <span aria-hidden="true">|</span>
-        <span>{date}</span>
+      <span className="fontSmall">{time}</span>
+        <span style={{ color:'var(--clrA_m)', marginLeft:'.33rem', marginRight:'.33rem' }} aria-hidden="true">|</span>
+        <span className="fontSmall">{date}</span>
       </div>
-      <h3 className={styles.title}>{title}</h3>
+      <h2>{title}</h2>
       <div className={styles.imageWrapper} style={{ width: '100%', height, position: 'relative', overflow: 'hidden' }}>
         {/**** Media-Type Detection ****/}
         {/(\.mp4$|\.webm$|\.mov$)/i.test(image) ? (

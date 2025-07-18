@@ -11,7 +11,7 @@ import Card from '@/components/Foundations/Card';
 import { NewsService } from '@/lib/services/news';
 
 
-export default function SmartflowerPage() {
+export default function aeroleafPage() {
   const accordionData = [
     {
       title: "HEK GmbH",
