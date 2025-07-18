@@ -1,6 +1,7 @@
 'use client';
 
 import styles from './Card.module.css';
+import Image from 'next/image';
 
 export type CardProps = {
   /** Article headline */
@@ -49,11 +50,7 @@ export default function Card({ image, aspectRatio = '16:9', title, time, date, c
             style={{ width: '100%', height: '100%', objectFit: 'cover', position: 'absolute', inset: 0 }}
           />
         ) : (
-          <img
-            src={image}
-            alt={title}
-            style={{ width: '100%', height: '100%', objectFit: 'cover', position: 'absolute', inset: 0 }}
-          />
+          <Image className={styles.media} alt={title} src={image} width={400} height={225} />
         )}
       </div>
     </div>

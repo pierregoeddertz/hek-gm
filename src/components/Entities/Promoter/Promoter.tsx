@@ -6,6 +6,7 @@ import Director from '@/components/Layout/Director';
 import styles from './Promoter.module.css';
 import Button from '@/components/Foundations/Button/Button';
 import Headline from '@/components/Foundations/Headline';
+import Image from 'next/image';
 
 export interface PromoterItem {
   id: string;
@@ -54,7 +55,7 @@ export default function Promoter() {
     const images: HTMLImageElement[] = [];
     items.forEach((item) => {
       if (item.image_url) {
-        const img = new Image();
+        const img = new window.Image(1, 1);
         img.src = item.image_url;
         images.push(img);
       }
@@ -89,7 +90,7 @@ export default function Promoter() {
 
   let content = null;
   if (items.length === 0 || isLoading) {
-    content = <img className={styles.media} alt="Promoter Platzhalter" draggable={false} />;
+    content = <Image className={styles.media} alt="Promoter Platzhalter" draggable={false} src="/vercel.svg" width={400} height={225} />;
   } else {
     const data = items[current];
     const isVideo = /(\.mp4$|\.webm$|\.mov$)/i.test(data.image_url || '');

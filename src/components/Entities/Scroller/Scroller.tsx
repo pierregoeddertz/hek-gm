@@ -2,10 +2,9 @@
 
 import { useState, useEffect, useRef } from 'react';
 import styles from './Scroller.module.css';
-import Button from '@/components/Foundations/Button/Button';
-import Headline from '@/components/Foundations/Headline';
 import Director from '@/components/Layout/Director';
 import Accordion from '@/components/Entities/Accordion';
+import Image from 'next/image';
 
 export interface ScrollerItem {
   id: string;
@@ -61,7 +60,7 @@ export default function Scroller() {
 
   let content = null;
   if (items.length === 0) {
-    content = <img className={styles.media} alt="Scroller Platzhalter" draggable={false} />;
+    content = <Image className={styles.media} alt="Scroller Platzhalter" draggable={false} src="/vercel.svg" width={400} height={225} />;
   } else {
     const idx = activeLi !== null ? activeLi : 0;
     const data = items[idx];

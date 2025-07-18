@@ -11,7 +11,9 @@ import Card from '@/components/Foundations/Card';
 import { NewsService } from '@/lib/services/news';
 
 
-export default function aeroleafPage() {
+type NewsType = { id: string; title?: string; content?: string; image_url?: string; created_at?: string; aspect_ratio?: '9:16' | '16:9' | '4:5' | '1:1' };
+
+export default function AeroleafPage() {
   const accordionData = [
     {
       title: "HEK GmbH",
@@ -52,7 +54,7 @@ export default function aeroleafPage() {
   const [openStates, setOpenStates] = useState<boolean[]>(Array(accordionData.length).fill(false));
 
   // News-Logik wie in news/page.tsx
-  const [news, setNews] = useState<any[]>([]);
+  const [news, setNews] = useState<NewsType[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 

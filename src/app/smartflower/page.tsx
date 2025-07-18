@@ -52,7 +52,8 @@ export default function SmartflowerPage() {
   const [openStates, setOpenStates] = useState<boolean[]>(Array(accordionData.length).fill(false));
 
   // News-Logik wie in news/page.tsx
-  const [news, setNews] = useState<any[]>([]);
+  type NewsType = { id: string; title?: string; content?: string; image_url?: string; created_at?: string; aspect_ratio?: '9:16' | '16:9' | '4:5' | '1:1' };
+  const [news, setNews] = useState<NewsType[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
