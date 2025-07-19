@@ -7,9 +7,10 @@ import Explorer from "@/components/Layout/Unit/Explorer";
 import Arm from "@/components/Foundations/Button/Arm";
 import Headline from '@/components/Foundations/Headline';
 import Accordion from "@/components/Entities/Accordion";
-import { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import Marquee from 'react-fast-marquee';
 import Director from "@/components/Layout/Director";
+import { useRouter } from 'next/navigation';
 
 function handleClick(type: string) {
   // Replace with your navigation or logic
@@ -17,6 +18,10 @@ function handleClick(type: string) {
 }
 
 export default function Home() {
+  const router = useRouter();
+  React.useEffect(() => {
+    router.replace('/coming-soon');
+  }, [router]);
   // Accordion-Daten als Array
   const accordionData = [
     {
