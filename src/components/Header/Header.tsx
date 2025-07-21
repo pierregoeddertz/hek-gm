@@ -11,7 +11,7 @@ export type HeaderProps = {
   className?: string;
 };
 
-export default function Header({ right, className = '' }: HeaderProps) {
+export default function Header({ right: _, className = '' }: HeaderProps) {
   const headerRef = useRef<HTMLDivElement>(null);
   const [panelOpen, setPanelOpen] = useState(false);
 

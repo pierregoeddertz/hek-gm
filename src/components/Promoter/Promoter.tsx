@@ -51,8 +51,8 @@ export default function Promoter({ tableName }: PromoterProps) {
         }))
       );
       setError(null);
-    } catch (err: any) {
-      setError(err.message || String(err));
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : String(err));
       console.error('Promoter fetch error:', err);
     } finally {
       setIsLoading(false);

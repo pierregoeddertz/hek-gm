@@ -88,6 +88,7 @@ export default function Scroller({ accordionData }: ScrollerProps) {
         draggable={false}
       />
     ) : (
+      // eslint-disable-next-line @next/next/no-img-element
       <img
         className={styles.media + ' ' + (isVisible ? styles.visible : styles.hidden)}
         src={data.image_url}

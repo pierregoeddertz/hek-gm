@@ -14,6 +14,34 @@ export default function Modal({ children }: ModalProps) {
   const contentRef = useRef<HTMLDivElement>(null);
   const [isClosing, setIsClosing] = useState(false);
 
+  const handleClose = () => {
+    if (isClosing) return;
+    
+    setIsClosing(true);
+    const htmlElement = document.documentElement;
+    
+    // Kein weiteres DOM-Element notwendig
+
+    // Speichere Scroll-Position
+    const scrollY = window.scrollY;
+    const scrollX = window.scrollX;
+    
+    // Entferne die globale Klasse -> beiden Animationen starten synchron
+    htmlElement.classList.remove('sidepanel-open');
+    
+    // Warte auf Animation completion mit präzisem Timing
+    setTimeout(() => {
+      // Complete Cleanup
+      htmlElement.style.overflow = '';
+      document.body.style.overflow = '';
+      
+      // Scroll-Position wiederherstellen
+      window.scrollTo(scrollX, scrollY);
+      
+      router.back();
+    }, 750); // Exakt die CSS-Transition-Dauer
+  };
+
   useLayoutEffect(() => {
     const htmlElement = document.documentElement;
 
@@ -48,35 +76,7 @@ export default function Modal({ children }: ModalProps) {
       document.body.style.overflow = '';
       window.scrollTo(scrollX, scrollY);
     };
-  }, []);
-
-  const handleClose = () => {
-    if (isClosing) return;
-    
-    setIsClosing(true);
-    const htmlElement = document.documentElement;
-    
-    // Kein weiteres DOM-Element notwendig
-
-    // Speichere Scroll-Position
-    const scrollY = window.scrollY;
-    const scrollX = window.scrollX;
-    
-    // Entferne die globale Klasse -> beiden Animationen starten synchron
-    htmlElement.classList.remove('sidepanel-open');
-    
-    // Warte auf Animation completion mit präzisem Timing
-    setTimeout(() => {
-      // Complete Cleanup
-      htmlElement.style.overflow = '';
-      document.body.style.overflow = '';
-      
-      // Scroll-Position wiederherstellen
-      window.scrollTo(scrollX, scrollY);
-      
-      router.back();
-    }, 750); // Exakt die CSS-Transition-Dauer
-  };
+  }, [handleClose]);
 
   return (
     <div
