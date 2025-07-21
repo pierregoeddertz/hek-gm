@@ -9,14 +9,15 @@ type BaseProps = {
   href?: string;
   style?: React.CSSProperties;
   className?: string;
+  underline?: boolean;
 };
 
 type ButtonProps = BaseProps & Omit<ButtonHTMLAttributes<HTMLButtonElement>, "className" | "style" | "children" | "href">;
 type AnchorProps = BaseProps & Omit<AnchorHTMLAttributes<HTMLAnchorElement>, "className" | "style" | "children" | "href">;
 
 const Button = forwardRef<HTMLButtonElement | HTMLAnchorElement, ButtonProps & AnchorProps>(
-  ({ text, href, style, className, ...rest }, ref) => {
-    const classNames = [styles.core, className].filter(Boolean).join(" ");
+  ({ text, href, style, className, underline, ...rest }, ref) => {
+    const classNames = [styles.core, underline && styles.underline, className].filter(Boolean).join(" ");
 
     if (!href) {
       // Nur Button-Props an <button>

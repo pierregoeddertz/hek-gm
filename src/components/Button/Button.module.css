@@ -14,4 +14,9 @@
 .core:focus {
   opacity: .33;
   transition: opacity var(--anm);
+}
+
+.underline {
+  text-decoration: underline;
+  text-underline-offset: 2px;
 } 
