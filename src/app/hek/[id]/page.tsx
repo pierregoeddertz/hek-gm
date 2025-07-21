@@ -7,7 +7,7 @@ import { notFound } from 'next/navigation';
 
 interface Props { params: Promise<{ id: string }> }
 
-async function HekDetail({ params }: Props) {
+export default async function HekDetailPage({ params }: Props) {
   const { id } = await params;
 
   const { data, error } = await supabase
@@ -48,10 +48,4 @@ async function HekDetail({ params }: Props) {
       </Unit>
     </>
   );
-}
-
-// Named export für Modal-Komponenten
-export { HekDetail };
-
-// Default export für Next.js Page
-export default HekDetail; 
+} 

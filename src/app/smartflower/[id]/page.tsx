@@ -8,7 +8,7 @@ import Promoter from '../../../components/Promoter';
 
 interface Props { params: Promise<{ id: string }> }
 
-async function SmartflowerDetail({ params }: Props) {
+export default async function SmartflowerDetailPage({ params }: Props) {
   const { id } = await params;
 
   const { data, error } = await supabase
@@ -53,10 +53,4 @@ async function SmartflowerDetail({ params }: Props) {
       </Unit>
     </>
   );
-}
-
-// Named export für Modal-Komponenten
-export { SmartflowerDetail };
-
-// Default export für Next.js Page
-export default SmartflowerDetail; 
+} 
