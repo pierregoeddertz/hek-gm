@@ -17,7 +17,6 @@ const Unit: React.FC<UnitProps> = ({ first = {}, second = {}, children }) => {
     >
       <Director
         direction="v 1 1"
-        paddingX
         {...second}
       >
         {children}
