@@ -18,7 +18,12 @@ export default async function SmartflowerDetailPage({ params }: Props) {
     .single();
 
   if (error || !data) {
-    notFound();
+    return (
+      <Unit second={{ spacingT: true, spacingB: true, widthMax: 3 }}>
+        <Text align={1} as="h2" fontLarge>Eintrag nicht gefunden</Text>
+        <Text align={1} as="p">Der angeforderte Beitrag konnte nicht geladen werden.</Text>
+      </Unit>
+    );
   }
 
   const item = data as SmartflowerItem;
