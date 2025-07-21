@@ -1,7 +1,7 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
-import { useLayoutEffect, useRef, useState } from 'react';
+import { useLayoutEffect, useRef, useState, useCallback } from 'react';
 import styles from './Modal.module.css';
 
 interface ModalProps {
@@ -14,7 +14,7 @@ export default function Modal({ children }: ModalProps) {
   const contentRef = useRef<HTMLDivElement>(null);
   const [isClosing, setIsClosing] = useState(false);
 
-  const handleClose = () => {
+  const handleClose = useCallback(() => {
     if (isClosing) return;
     
     setIsClosing(true);
@@ -40,7 +40,7 @@ export default function Modal({ children }: ModalProps) {
       
       router.back();
     }, 750); // Exakt die CSS-Transition-Dauer
-  };
+  }, [isClosing, router]);
 
   useLayoutEffect(() => {
     const htmlElement = document.documentElement;
