@@ -9,7 +9,7 @@ interface Props {
   params: Promise<{ id: string }> 
 }
 
-export async function NewsDetail({ params }: Props) {
+async function NewsDetail({ params }: Props) {
   const { id } = await params;
 
   const { data, error } = await supabase
@@ -52,4 +52,8 @@ export async function NewsDetail({ params }: Props) {
   );
 }
 
+// Named export für Modal-Komponenten
+export { NewsDetail };
+
+// Default export für Next.js Page
 export default NewsDetail; 
