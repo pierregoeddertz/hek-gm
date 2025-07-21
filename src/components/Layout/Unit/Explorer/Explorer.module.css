@@ -1,0 +1,16 @@
+.root {
+  touch-action: pan-y;
+  overscroll-behavior-x: contain;
+  cursor: grab;
+  width: 100%;
+}
+
+.root:active {
+  cursor: grabbing;
+} 
+
+.track {
+  display: inline-flex;
+  will-change: transform;
+  width: auto;
+}
