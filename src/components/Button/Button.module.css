@@ -1,0 +1,17 @@
+.core {
+  cursor: pointer;
+  border: none;
+  background: transparent;
+  padding: 0;
+  margin: 0;
+  font-family: inherit;
+  font-size: inherit;
+  color: inherit;
+  text-decoration: none;
+}
+
+.core:hover,
+.core:focus {
+  opacity: .33;
+  transition: opacity var(--anm);
+} 
