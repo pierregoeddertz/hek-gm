@@ -23,7 +23,7 @@ interface CardProps {
 export default function Card({ 
   href, 
   title, 
-  subtitle, 
+  subtitle: _subtitle, 
   imageSrc, 
   imageAlt, 
   aspectRatio = '16:9',
@@ -44,7 +44,7 @@ export default function Card({
       try {
         console.log(`Card clicked: ${tableName} record ${recordId}`);
         // Dynamisch supabase importieren um Bundle-Größe klein zu halten
-        const { supabase } = await import('../../lib/supabase');
+        const { supabase: _supabase } = await import('../../lib/supabase');
         // Beispiel: Klicks erhöhen (optional)
         // await supabase.rpc('increment_view_count', { row_id: recordId, table_name: tableName });
       } catch (error) {

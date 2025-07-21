@@ -1,4 +1,4 @@
-import Link from 'next/link';
+
 import { supabase, SmartflowerItem } from '../../lib/supabase';
 import Card from '../../components/Card';
 import Dragger from '../../components/Dragger';

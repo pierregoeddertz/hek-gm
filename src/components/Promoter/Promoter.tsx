@@ -124,6 +124,7 @@ export default function Promoter({ tableName }: PromoterProps) {
         draggable={false}
       />
     ) : (
+      // eslint-disable-next-line @next/next/no-img-element
       <img
         className={
           styles.media +
