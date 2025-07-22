@@ -33,7 +33,7 @@ export default async function SmartflowerDetailPage({ params }: Props) {
       <h1 className="visually-hidden">Smartflower</h1>
 
       <Unit first={{}}>
-        <Promoter tableName={["smartflower"]} />
+        <Promoter tableName="smartflower" />
       </Unit>
 
       <Unit first={{ as: "header"}} second={{ spacingT: true, spacingB: true, widthMax: 3 }}>
