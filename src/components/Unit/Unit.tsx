@@ -1,7 +1,7 @@
 import React from 'react';
-import Director from '../Director';
+import Director, { type DirectorProps } from '../Director';
 
-type DirectorPropsWithoutChildren = Omit<React.ComponentProps<typeof Director>, 'children'>;
+type DirectorPropsWithoutChildren = Omit<DirectorProps, 'children'>;
 
 interface UnitProps {
   first?: DirectorPropsWithoutChildren;

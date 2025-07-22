@@ -1,7 +1,7 @@
 import React, { forwardRef } from 'react';
 import styles from './Director.module.css';
 
-interface DirectorProps extends React.HTMLAttributes<HTMLElement> {
+export interface DirectorProps extends React.HTMLAttributes<HTMLElement> {
   children: React.ReactNode;
   direction?: string;
   className?: string;
@@ -14,10 +14,16 @@ interface DirectorProps extends React.HTMLAttributes<HTMLElement> {
   spacingB?: boolean;
   gapX?: boolean;
   gapY?: boolean;
+  colorDom?: boolean;
 }
 
+const baseStyles = {
+  display: 'flex' as const,
+  width: '100%',
+};
+
 const Director = forwardRef<HTMLElement, DirectorProps>(
-  ({ children, direction = 'v 1 2', className = '', style, as = 'div', widthMax, heightFull = false, paddingX = false, paddingY = false, spacingT = false, spacingB = false, gapX = false, gapY = false, ...rest }, ref) => {
+  ({ children, direction = 'v 1 2', className = '', style, as = 'div', widthMax, heightFull = false, paddingX = false, paddingY = false, spacingT = false, spacingB = false, gapX = false, gapY = false, colorDom = false, ...rest }, ref) => {
     const parts = direction.trim().split(/\s+/);
     const dir = parts[0] === 'h' ? 'horizontal' : 'vertical';
     const justify = parseInt(parts[1] || '2', 10);
@@ -44,13 +50,24 @@ const Director = forwardRef<HTMLElement, DirectorProps>(
       className
     ].filter(Boolean).join(' ');
 
+    const combinedStyle = {
+      ...baseStyles,
+      ...(colorDom && { backgroundColor: 'var(--clrD_a)' }),
+      ...style,
+    };
+
+    const additionalProps = {
+      ...(colorDom && { 'data-push_colordom': '' }),
+      ...rest,
+    };
+
     return React.createElement(
       as,
       {
         className: classes,
-        style,
+        style: combinedStyle,
         ref,
-        ...rest,
+        ...additionalProps,
       },
       children
     );
