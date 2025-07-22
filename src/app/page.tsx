@@ -93,7 +93,11 @@ export default function Home() {
 
       {/* Promoter ganz oben */}
       <Unit first={{}}>
-        <Promoter tableName={["news", "smartflower", "hek"]} />
+        <Promoter tableName={[
+          "news",
+          "smartflower",
+          "hek",
+        ] as string[]} />
       </Unit>
 
       <Unit second={{ spacingT: true, spacingB: true, widthMax: 1 }}>
