@@ -30,10 +30,12 @@ export default async function SmartflowerDetailPage({ params }: Props) {
 
   return (
     <>
-    <h1 className="visually-hidden">HEK</h1>
-      <Unit second={{ style: { padding: '0' } }}>
-        <Promoter tableName="smartflower" />
+      <h1 className="visually-hidden">Smartflower</h1>
+
+      <Unit first={{ colorDom: true }}>
+        <Promoter tableName={["smartflower"]} />
       </Unit>
+
       <Unit first={{ as: "header"}} second={{ spacingT: true, spacingB: true, widthMax: 3 }}>
         <Director direction="v 1 2" gapY={true}>
           <Director direction="h 2 2" gapX={true}>
@@ -47,13 +49,14 @@ export default async function SmartflowerDetailPage({ params }: Props) {
           <Text as="h1" align={2} fontLarge>{item.title}</Text>
         </Director>
       </Unit>
+
       {item.image_url && (
         <Unit second={{ widthMax: 2 }}>
-          <Media src={item.image_url} alt={item.title} aspectRatio={item.aspect_ratio || '16:9'} />
+          <Media src={item.image_url} aspectRatio={item.aspect_ratio || '16:9'} />
         </Unit>
       )}
+
       <Unit second={{ spacingT: true, spacingB: true, widthMax: 3, gapY: true }}>
-        {item.subtitle && <Text align={1} as="h3" fontMid>{item.subtitle}</Text>}
         <Text align={1} as="p">{item.content}</Text>
       </Unit>
     </>

@@ -12,8 +12,8 @@ const outfit = Outfit({
 });
 
 export const metadata: Metadata = {
-  title: "HEK-GM",
-  description: "HEK-GM Website",
+  title: "HEK Gebäudemanagement GmbH",
+  description: "HEK Gebäudemanagement GmbH Website",
 };
 
 export default function RootLayout({

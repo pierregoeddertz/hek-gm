@@ -49,10 +49,15 @@ export default async function NewsDetailPage({ params }: Props) {
           <Media src={item.image_url} alt={item.title} aspectRatio={item.aspect_ratio || '16:9'} />
         </Unit>
       )}
-      <Unit second={{ spacingT: true, spacingB: true, widthMax: 3, gapY: true }}>
-        {item.subtitle && <Text align={1} as="h3" fontMid>{item.subtitle}</Text>}
+      <Unit second={{ spacingB: true, widthMax: 3, gapY: true }}>
         <Text align={1} as="p">{item.content}</Text>
       </Unit>
+      {item.sections && item.sections.map((section, index) => (
+        <Unit key={index} second={{ spacingB: true, widthMax: 3, gapY: true }}>         
+          <Text align={1} as="h2" fontMid>{section.heading}</Text>
+          <Text align={1} as="p">{section.content}</Text>
+        </Unit>
+      ))}
     </>
   );
 } 

@@ -3,7 +3,7 @@ import SmartflowerDetailPage from '../../../smartflower/[id]/page';
 
 interface Props { params: Promise<{ id: string }> }
 
-export default async function ModalSmartflowerPage({ params }: Props) {
+export default async function ModalSmartflowerInterceptedPage({ params }: Props) {
   return (
     <Modal>
       <SmartflowerDetailPage params={params} />

@@ -1,5 +1,5 @@
-import Modal from '../../../components/Modal';
-import HekDetailPage from '../../hek/[id]/page';
+import Modal from '../../../../components/Modal';
+import HekDetailPage from '../../../hek/[id]/page';
 
 interface Props { params: Promise<{ id: string }> }
 

@@ -1,7 +1,7 @@
-import Unit from '../../components/Unit';
-import Text from '../../components/Text';
-import Director from '../../components/Director';
-import Button from '../../components/Button/Button';
+import Unit from '../../../components/Unit';
+import Text from '../../../components/Text';
+import Director from '../../../components/Director';
+import Button from '../../../components/Button';
 
 export default function PrivacyPolicyPage() {
   return (
