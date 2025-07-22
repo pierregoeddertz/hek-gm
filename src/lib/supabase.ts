@@ -15,7 +15,11 @@ export interface NewsItem {
   aspect_ratio?: '9:16' | '16:9' | '4:5' | '1:1';
   promoted: boolean;
   created_at: string;
-} 
+  sections?: Array<{
+    heading: string;
+    content: string;
+  }>;
+}
 
 // Typen für Smartflower-Tabelle
 export interface SmartflowerItem {
@@ -39,4 +43,11 @@ export interface HekItem {
   aspect_ratio?: '9:16' | '16:9' | '4:5' | '1:1';
   promoted: boolean;
   created_at: string;
+}
+
+// Typen für Referenzen-Tabelle
+export interface ReferenzenItem {
+  id: number; // bigint
+  created_at: string;
+  image_url?: string;
 } 
