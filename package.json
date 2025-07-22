@@ -15,7 +15,8 @@
     "lodash": "^4.17.21",
     "next": "15.4.2",
     "react": "^19",
-    "react-dom": "^19"
+    "react-dom": "^19",
+    "react-fast-marquee": "^1.6.5"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
