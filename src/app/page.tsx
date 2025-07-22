@@ -75,7 +75,7 @@ export default function Home() {
       console.log('HEK Data loaded:', data, 'Error:', error);
       
       if (!error && data) {
-        setHekIds(data.map((d: any) => d.id));
+        setHekIds((data as { id: string }[]).map(d => d.id));
       }
     })();
 
