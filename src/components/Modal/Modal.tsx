@@ -20,26 +20,23 @@ export default function Modal({ children }: ModalProps) {
     setIsClosing(true);
     const htmlElement = document.documentElement;
     
-    // Kein weiteres DOM-Element notwendig
-
     // Speichere Scroll-Position
     const scrollY = window.scrollY;
     const scrollX = window.scrollX;
     
-    // Entferne die globale Klasse -> beiden Animationen starten synchron
-    htmlElement.classList.remove('sidepanel-open');
-    
-    // Warte auf Animation completion mit präzisem Timing
+    // Start closing animation
+    htmlElement.classList.add('sidepanel-closing'); // keep sidepanel-open
+
+    // Warte exakt die Transition-Dauer, dann Navigation & Cleanup
     setTimeout(() => {
-      // Complete Cleanup
+      htmlElement.classList.remove('sidepanel-open');
+      htmlElement.classList.remove('sidepanel-closing');
       htmlElement.style.overflow = '';
       document.body.style.overflow = '';
-      
       // Scroll-Position wiederherstellen
       window.scrollTo(scrollX, scrollY);
-      
       router.back();
-    }, 750); // Exakt die CSS-Transition-Dauer
+    }, 750);
   }, [isClosing, router]);
 
   useLayoutEffect(() => {

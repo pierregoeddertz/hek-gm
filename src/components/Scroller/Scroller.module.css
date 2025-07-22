@@ -22,7 +22,6 @@
 .hidden {
   opacity: 0;
   transform: scale(1.1);
-  transition: none;
 }
 
 .verbal {
@@ -31,13 +30,15 @@
 }
 
 .headlineFade {
-  transition: opacity var(--anm);
+  transition: opacity var(--anm), transform var(--anm);
   opacity: 0;
-  transform: none !important;
+  transform: translateY(20px);
 }
 .headlineFade.visible {
   opacity: 1;
+  transform: translateY(0);
 }
 .headlineFade.hidden {
   opacity: 0;
+  transform: translateY(20px);
 } 

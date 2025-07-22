@@ -13,234 +13,189 @@ interface DraggerProps {
 const Dragger: React.FC<DraggerProps> = ({ children, first = {}, second = {}, className, style }) => {
   const outerRef = useRef<HTMLDivElement>(null);
   const [isDragging, setIsDragging] = useState(false);
-  const [startX, setStartX] = useState(0);
-  const [scrollLeft, setScrollLeft] = useState(0);
-  const [lastX, setLastX] = useState(0);
-  const [velocity, setVelocity] = useState(0);
-  const [isMouseDevice, setIsMouseDevice] = useState(true);
-  const animationRef = useRef<number | null>(null);
-  const lastTimeRef = useRef<number>(0);
-  const velocityHistory = useRef<Array<{ velocity: number; time: number }>>([]);
-  const activeRef = useRef<React.RefObject<HTMLDivElement | null> | null>(null);
   const [isMouseDown, setIsMouseDown] = useState(false);
-  const dragThreshold = 5; // Mindestbewegung in Pixeln für Drag-Aktivierung
+  const [isTouchDevice, setIsTouchDevice] = useState(false);
+  const startX = useRef(0);
+  const scrollLeft = useRef(0);
+  const velocity = useRef(0);
+  const dragThreshold = 10;
+  const hasDraggedRef = useRef(false);
+  const animationFrameId = useRef<number | null>(null);
 
   useEffect(() => {
-    // Erkenne ob es ein Touch-Gerät ist
-    const hasCoarsePointer = window.matchMedia("(pointer: coarse)").matches;
-    const hasTouchSupport = "ontouchstart" in window;
-    setIsMouseDevice(!hasCoarsePointer && !hasTouchSupport);
-  }, []);
-
-  const momentum = useCallback((ref: React.RefObject<HTMLDivElement | null>, vel: number) => {
-    if (!ref.current || Math.abs(vel) < 0.05) return;
-
-    // Natürlichere Reibung - exponentieller Abfall
-    const deceleration = 0.92; // Basis-Deceleration
-    const velocityFactor = Math.abs(vel) / 50; // Geschwindigkeits-abhängige Reibung
-    const dynamicFriction = Math.max(0.85, deceleration - velocityFactor * 0.02);
-
-    // Zusätzliche Reibung bei sehr hohen Geschwindigkeiten
-    const highSpeedFriction = Math.abs(vel) > 30 ? 0.88 : 1;
-
-    const newVelocity = vel * dynamicFriction * highSpeedFriction;
-
-    ref.current.scrollLeft -= newVelocity;
-
-    // Sanftes Bounce-Verhalten an den Grenzen
-    const maxScroll = ref.current.scrollWidth - ref.current.clientWidth;
-    let bounceVelocity = newVelocity;
-
-    if (ref.current.scrollLeft < 0) {
-      ref.current.scrollLeft = Math.max(-20, ref.current.scrollLeft); // Kleiner Overscroll
-      bounceVelocity = Math.abs(newVelocity) * 0.3; // Bounce zurück
-      if (ref.current.scrollLeft >= -1) {
-        ref.current.scrollLeft = 0;
-        bounceVelocity = 0;
-      }
-    } else if (ref.current.scrollLeft > maxScroll) {
-      ref.current.scrollLeft = Math.min(maxScroll + 20, ref.current.scrollLeft); // Kleiner Overscroll
-      bounceVelocity = -Math.abs(newVelocity) * 0.3; // Bounce zurück
-      if (ref.current.scrollLeft <= maxScroll + 1) {
-        ref.current.scrollLeft = maxScroll;
-        bounceVelocity = 0;
-      }
-    }
-
-    setVelocity(bounceVelocity);
-
-    // Natürlichere Stopp-Bedingung
-    if (Math.abs(bounceVelocity) > 0.05) {
-      animationRef.current = requestAnimationFrame(() => momentum(ref, bounceVelocity));
+    if (typeof window !== "undefined") {
+      setIsTouchDevice("ontouchstart" in window || navigator.maxTouchPoints > 0);
     }
   }, []);
 
-  const calculateVelocity = (currentX: number, currentTime: number) => {
-    const history = velocityHistory.current;
-    history.push({ velocity: currentX, time: currentTime });
-
-    // Behalte nur die letzten 5 Messungen für glattere Berechnung
-    if (history.length > 5) {
-      history.shift();
+  const startInertiaScroll = useCallback(() => {
+    if (!outerRef.current || Math.abs(velocity.current) < 0.5) {
+      velocity.current = 0;
+      if (animationFrameId.current) {
+        cancelAnimationFrame(animationFrameId.current);
+        animationFrameId.current = null;
+      }
+      return;
     }
 
-    if (history.length < 2) return 0;
+    outerRef.current.scrollLeft += velocity.current;
+    velocity.current *= 0.92;
 
-    // Gewichteter Durchschnitt der letzten Geschwindigkeiten
-    let totalWeight = 0;
-    let weightedVelocity = 0;
+    animationFrameId.current = requestAnimationFrame(startInertiaScroll);
+  }, []);
 
-    for (let i = 1; i < history.length; i++) {
-      const timeDelta = history[i].time - history[i - 1].time;
-      const distance = history[i].velocity - history[i - 1].velocity;
+  const handleMouseDown = (e: React.MouseEvent) => {
+    if (isTouchDevice) return;
+    if (!outerRef.current) return;
 
-      if (timeDelta > 0) {
-        const velocity = (distance / timeDelta) * 16; // Normalisiert auf 60fps
-        const weight = Math.max(0.1, 1 - (currentTime - history[i].time) / 100); // Neuere Werte haben mehr Gewicht
-
-        weightedVelocity += velocity * weight;
-        totalWeight += weight;
-      }
-    }
-
-    return totalWeight > 0 ? weightedVelocity / totalWeight : 0;
-  };
-
-  // Global mouse move handler mit Drag-Threshold
-  const handleGlobalMouseMove = useCallback(
-    (e: globalThis.MouseEvent) => {
-      if (!isMouseDown || !activeRef.current?.current) return;
-
-      const currentTime = Date.now();
-      const distance = Math.abs(e.pageX - startX);
-
-      // Aktiviere Dragging erst nach Threshold
-      if (!isDragging && distance > dragThreshold) {
-        setIsDragging(true);
-        if (activeRef.current.current) {
-          activeRef.current.current.style.cursor = "grabbing";
-        }
-      }
-
-      // Führe Scrolling nur aus, wenn wirklich gedraggt wird
-      if (isDragging) {
-        // 1:1 Bewegung - absolut parallel zur Cursor-Bewegung
-        const walk = e.pageX - startX;
-
-        // Speichere Position für Geschwindigkeitsberechnung
-        velocityHistory.current.push({ velocity: e.pageX, time: currentTime });
-
-        activeRef.current.current.scrollLeft = scrollLeft - walk;
-        setLastX(e.pageX);
-        lastTimeRef.current = currentTime;
-      }
-    },
-    [isMouseDown, isDragging, startX, scrollLeft, dragThreshold],
-  );
-
-  // Global mouse up handler mit Click-Erkennung
-  const handleGlobalMouseUp = useCallback(() => {
-    if (isMouseDown && activeRef.current?.current && isMouseDevice) {
-      // Momentum nur starten, wenn wirklich gedraggt wurde
-      if (isDragging) {
-        // Starte Momentum mit berechneter Geschwindigkeit
-        const finalVelocity = calculateVelocity(lastX, Date.now());
-        if (activeRef.current) {
-          momentum(activeRef.current, finalVelocity);
-        }
-      }
-
-      setIsDragging(false);
-      setIsMouseDown(false);
-      activeRef.current.current.style.cursor = "grab";
-      document.body.style.cursor = "";
-      document.body.style.userSelect = "";
-
-      activeRef.current = null;
-    }
-  }, [isMouseDown, isDragging, isMouseDevice, lastX, momentum]);
-
-  // Event listeners für globale Events
-  useEffect(() => {
-    if (isMouseDown) {
-      document.addEventListener("mousemove", handleGlobalMouseMove);
-      document.addEventListener("mouseup", handleGlobalMouseUp);
-      
-      // Nur während echtem Dragging Cursor und Selection ändern
-      if (isDragging) {
-        document.body.style.cursor = "grabbing";
-        document.body.style.userSelect = "none";
-      }
-
-      return () => {
-        document.removeEventListener("mousemove", handleGlobalMouseMove);
-        document.removeEventListener("mouseup", handleGlobalMouseUp);
-        document.body.style.cursor = "";
-        document.body.style.userSelect = "";
-      };
-    }
-  }, [isMouseDown, isDragging, handleGlobalMouseMove, handleGlobalMouseUp]);
-
-  const handleMouseDown = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (!outerRef.current || !isMouseDevice) return;
-
-    // Stoppe laufende Momentum-Animation
-    if (animationRef.current) {
-      cancelAnimationFrame(animationRef.current);
+    if (animationFrameId.current) {
+      cancelAnimationFrame(animationFrameId.current);
+      animationFrameId.current = null;
     }
 
     setIsMouseDown(true);
-    // isDragging wird erst bei Bewegung über Threshold aktiviert
-    activeRef.current = outerRef; // WICHTIG: Setze die Ref-Referenz
-    setStartX(e.pageX);
-    setLastX(e.pageX);
-    setScrollLeft(outerRef.current.scrollLeft);
-    setVelocity(0);
-    lastTimeRef.current = Date.now();
-    velocityHistory.current = [];
+    hasDraggedRef.current = false;
+    setIsDragging(false);
+    startX.current = e.pageX - outerRef.current.offsetLeft;
+    scrollLeft.current = outerRef.current.scrollLeft;
+    velocity.current = 0;
+    e.preventDefault();
+  };
 
-    // Cursor wird erst beim echten Dragging auf "grabbing" gesetzt
+  const handleMouseMove = (e: React.MouseEvent) => {
+    if (isTouchDevice) return;
+    if (!isMouseDown || !outerRef.current) return;
+
+    const x = e.pageX - outerRef.current.offsetLeft;
+    const delta = x - startX.current;
+
+    if (!isDragging) {
+      if (Math.abs(delta) < dragThreshold) {
+        return;
+      }
+      setIsDragging(true);
+      hasDraggedRef.current = true;
+    }
+
+    outerRef.current.scrollLeft = scrollLeft.current - delta;
+    velocity.current = e.movementX * -1;
+  };
+
+  const handleMouseUp = () => {
+    if (isTouchDevice) return;
+
+    if (isDragging) {
+      if (Math.abs(velocity.current) > 0) {
+        startInertiaScroll();
+      }
+    }
+
+    setIsDragging(false);
+    setIsMouseDown(false);
+  };
+
+  const handleMouseLeave = () => {
+    if (isTouchDevice) return;
+
+    if (isMouseDown && isDragging) {
+      if (Math.abs(velocity.current) > 0) {
+        startInertiaScroll();
+      }
+    }
+
+    setIsDragging(false);
+    setIsMouseDown(false);
+  };
+
+  const handleClickCapture = (e: React.MouseEvent) => {
+    if (hasDraggedRef.current) {
+      e.preventDefault();
+      e.stopPropagation();
+      hasDraggedRef.current = false;
+    }
+  };
+
+  const handleTouchStart = (e: React.TouchEvent) => {
+    if (!outerRef.current) return;
+
+    setIsMouseDown(true);
+    hasDraggedRef.current = false;
+    setIsDragging(false);
+    startX.current = e.touches[0].pageX - outerRef.current.offsetLeft;
+    scrollLeft.current = outerRef.current.scrollLeft;
+    velocity.current = 0;
+  };
+
+  const handleTouchMove = (e: React.TouchEvent) => {
+    if (!isMouseDown || !outerRef.current) return;
+
+    const x = e.touches[0].pageX - outerRef.current.offsetLeft;
+    const delta = x - startX.current;
+
+    if (!isDragging) {
+      if (Math.abs(delta) < dragThreshold) {
+        return;
+      }
+      setIsDragging(true);
+      hasDraggedRef.current = true;
+    }
+
+    outerRef.current.scrollLeft = scrollLeft.current - delta;
+    velocity.current = e.touches[0].pageX - startX.current;
+    startX.current = e.touches[0].pageX;
+  };
+
+  const handleTouchEnd = () => {
+    if (isDragging) {
+      if (Math.abs(velocity.current) > 0) {
+        startInertiaScroll();
+      }
+    }
+
+    setIsDragging(false);
+    setIsMouseDown(false);
   };
 
   return (
     <Director
       direction="h 1 1"
       ref={outerRef}
-      style={{ 
-        overflowX: 'auto', 
-        ...style, 
+      style={{
+        overflowX: 'auto',
+        ...style,
         ...(first?.style || {}),
         width: '100%',
         userSelect: 'none',
         scrollbarWidth: 'none',
         msOverflowStyle: 'none',
-        cursor: isMouseDevice ? 'grab' : 'default'
+        cursor: !isTouchDevice ? 'grab' : 'default',
       }}
       className={className || first?.className}
       {...first}
-      {...(isMouseDevice && {
-        onMouseDown: handleMouseDown,
-        onMouseMove: (e: React.MouseEvent<HTMLDivElement>) => {
-          if (!isDragging || !outerRef.current) return;
-          e.preventDefault();
-        },
-      })}
+      onMouseDown={!isTouchDevice ? handleMouseDown : undefined}
+      onMouseMove={!isTouchDevice ? handleMouseMove : undefined}
+      onMouseUp={!isTouchDevice ? handleMouseUp : undefined}
+      onMouseLeave={!isTouchDevice ? handleMouseLeave : undefined}
+      onClickCapture={!isTouchDevice ? handleClickCapture : undefined}
+      onTouchStart={isTouchDevice ? handleTouchStart : undefined}
+      onTouchMove={isTouchDevice ? handleTouchMove : undefined}
+      onTouchEnd={isTouchDevice ? handleTouchEnd : undefined}
     >
       <style>{`
         .dragger-container::-webkit-scrollbar { display: none !important; }
       `}</style>
-      
+
       <Director
         direction="h 1 1"
-        style={{ 
+        style={{
           display: 'inline-flex',
           width: 'auto',
           flexWrap: 'nowrap',
           ...(second?.style || {}),
-          pointerEvents: isDragging ? 'none' : 'auto'
+          pointerEvents: isDragging ? 'none' : 'auto',
         }}
         {...second}
-        onDragStart={e => e.preventDefault()}
+        onDragStart={(e) => e.preventDefault()}
       >
         {children}
       </Director>

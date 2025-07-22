@@ -37,7 +37,8 @@ const Button = forwardRef<HTMLButtonElement | HTMLAnchorElement, ButtonProps & A
         </a>
       );
     }
-    // Next.js Link - Sidepanel functionality works through routing
+    
+    // Next.js Link - Intercepting Routes funktionieren automatisch
     return (
       <Link href={href} className={classNames} style={style}>
         {text}
