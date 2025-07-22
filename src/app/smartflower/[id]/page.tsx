@@ -32,7 +32,7 @@ export default async function SmartflowerDetailPage({ params }: Props) {
     <>
       <h1 className="visually-hidden">Smartflower</h1>
 
-      <Unit first={{ colorDom: true }}>
+      <Unit first={{}}>
         <Promoter tableName={["smartflower"]} />
       </Unit>
 
@@ -52,7 +52,7 @@ export default async function SmartflowerDetailPage({ params }: Props) {
 
       {item.image_url && (
         <Unit second={{ widthMax: 2 }}>
-          <Media src={item.image_url} aspectRatio={item.aspect_ratio || '16:9'} />
+          <Media src={item.image_url} alt={item.title} aspectRatio={item.aspect_ratio || '16:9'} />
         </Unit>
       )}
 
