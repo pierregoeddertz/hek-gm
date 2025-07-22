@@ -91,7 +91,8 @@ export default function Home() {
     <>
       <h1 className="visually-hidden">HEK</h1>
 
-      <Unit first={{ colorDom: true }}>
+      {/* Promoter ganz oben */}
+      <Unit first={{}}>
         <Promoter tableName={["news", "smartflower", "hek"]} />
       </Unit>
 
