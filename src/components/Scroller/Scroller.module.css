@@ -42,3 +42,11 @@
   opacity: 0;
   transform: translateY(20px);
 } 
+
+.whiteText {
+  color: white !important;
+}
+
+.whiteText * {
+  color: white !important;
+} 

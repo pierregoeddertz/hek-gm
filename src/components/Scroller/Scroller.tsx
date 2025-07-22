@@ -136,7 +136,7 @@ export default function Scroller({ accordionData }: ScrollerProps) {
       <div style={{ position: 'sticky', top: 0, width: '100%', height: '100vh', zIndex: 0, overflow: 'hidden' }}>
         {content}
       </div>
-        <Unit second={{ spacingT: true, spacingB: true, widthMax: 1 }}>
+        <Unit second={{ spacingT: true, spacingB: true, widthMax: 1, style: { position: 'relative', zIndex: 1 }, className: styles.whiteText }}>
           <Accordion
             title={accordionData[0].title}
             subtitle={accordionData[0].subtitle}
@@ -150,7 +150,7 @@ export default function Scroller({ accordionData }: ScrollerProps) {
             {accordionData[0].content}
           </Accordion>
         </Unit>
-        <Unit second={{ spacingT: true, spacingB: true, widthMax: 1, style: { gap: 'var(--vlu_spacing_1)' } }}>
+        <Unit second={{ spacingT: true, spacingB: true, widthMax: 1, style: { gap: 'var(--vlu_spacing_1)', position: 'relative', zIndex: 1 }, className: styles.whiteText }}>
           <Director as="ol" direction="v 2 1" style={{ gap: '.5rem', listStyle: 'none' }}>
             <Text as="h4" style={{ marginBottom: '.5rem' }}>Mess-, Steuerungs-, Regelungs- & Elektrotechnik</Text>
             <Text as="li" fontLarge>Opel</Text>
@@ -159,14 +159,14 @@ export default function Scroller({ accordionData }: ScrollerProps) {
             <Text as="li" fontLarge>Winx</Text>
             <Text as="li" fontLarge>Grand Tower</Text>
           </Director>
-          <Director as="ol" direction="v 1 1" style={{ gap: '.5rem' }}>
+          <Director as="ol" direction="v 1 1" style={{ gap: '.5rem', listStyle: 'none'  }}>
             <Text as="h4" style={{ marginBottom: '.5rem' }}>Kälte-, Klima- & Lüftungstechnik</Text>
             <Text as="li" fontLarge>Porsche Museum</Text>
             <Text as="li" fontLarge>Ostbahnhof</Text>
             <Text as="li" fontLarge>Courtyard bei Marriott Hotel</Text>
             <Text as="li" fontLarge>Deutsche Bahn</Text>
           </Director>
-          <Director as="ol" direction="v 1 1" style={{ gap: '.5rem', marginBottom: '5rem' }}>
+          <Director as="ol" direction="v 1 1" style={{ gap: '.5rem', marginBottom: '5rem', listStyle: 'none'  }}>
             <Text as="h4" style={{ marginBottom: '.5rem' }}>TGA-Planung & Projektleitung</Text>
             <Text as="li" fontLarge>Flughafen BER</Text>
             <Text as="li" fontLarge>Europa Passage</Text>
