@@ -27,7 +27,7 @@ export default async function NewsPage() {
       <h1 className="visually-hidden">News</h1>
       
       {displayItems && displayItems.length > 0 && (
-        <Unit>
+        <Unit second={{ paddingX: false }}>
           <Dragger second={{ heightFull: true, direction: 'h 1 3', gapX: true, paddingX: true, style: { paddingBottom: 'var(--hgt_header)' } }}>
             {displayItems.map((item: NewsItem, idx) => (
               <Card
