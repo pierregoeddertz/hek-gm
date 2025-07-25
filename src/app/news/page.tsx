@@ -40,8 +40,6 @@ export default async function NewsPage() {
                 imageSrc={item.image_url || 'https://via.placeholder.com/275x155/007acc/ffffff?text=' + encodeURIComponent(item.title)}
                 imageAlt={item.title}
                 aspectRatio={['9:16','16:9','4:5','1:1'].includes(item.aspect_ratio || '') ? item.aspect_ratio as '9:16' | '16:9' | '4:5' | '1:1' : undefined}
-                tableName="news"
-                recordId={item.id}
                 createdAt={item.created_at}
               />
             ))}

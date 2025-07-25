@@ -121,11 +121,6 @@ const Header = memo(({ right: _, className = '' }: HeaderProps) => {
     };
   }, [checkColorDomElements]);
 
-  const handleMenuClick = () => {
-    setMenuOpen(!menuOpen);
-    console.log('Menu clicked:', !menuOpen);
-  };
-
   const handleLogoClick = () => {
     // Navigation zur Homepage
     if (typeof window !== 'undefined') {

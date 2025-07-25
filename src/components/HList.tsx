@@ -2,7 +2,6 @@
 
 import React from 'react';
 import Director from './Director';
-import Text from './Text';
 
 interface HListProps {
   items: React.ReactNode[];

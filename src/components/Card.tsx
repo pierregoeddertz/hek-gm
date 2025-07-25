@@ -6,7 +6,6 @@ import Media from './Media';
 import Director from './Director';
 import Text from './Text';
 import HList from './HList';
-import { supabase } from '../lib/supabase';
 
 interface CardProps {
   href: string;
@@ -15,25 +14,18 @@ interface CardProps {
   imageSrc: string;
   imageAlt: string;
   aspectRatio?: '9:16' | '16:9' | '4:5' | '1:1';
-  tableName?: string;
-  recordId?: string;
   createdAt?: string;
   showDate?: boolean;
-  onError?: (error: unknown) => void;
 }
 
 export default function Card({
   href,
   title,
-  subtitle,
   imageSrc,
   imageAlt,
   aspectRatio,
-  tableName,
-  recordId,
   createdAt,
   showDate = true,
-  onError,
 }: CardProps) {
   const [isTouch, setIsTouch] = useState(false);
 

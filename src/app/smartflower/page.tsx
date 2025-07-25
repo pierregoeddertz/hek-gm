@@ -6,15 +6,12 @@ import Card from '../../components/Card';
 import Dragger from '../../components/Dragger';
 import Unit from '../../components/Unit';
 import Promoter from '../../components/Promoter';
-import Director from '../../components/Director';
-import Text from '../../components/Text';
 import Accordion from '../../components/Accordion';
 import '../globals.css';
 
 export default function SmartflowerPage() {
   const [openStates, setOpenStates] = useState<boolean[]>([false, false]);
   const [smartflowerItems, setSmartflowerItems] = useState<SmartflowerItem[] | null>(null);
-  const [error, setError] = useState<unknown>(null);
 
   const accordionData = [
     {
@@ -36,7 +33,9 @@ export default function SmartflowerPage() {
         .select('*')
         .order('promoted', { ascending: false })
         .order('dragger_order', { ascending: true });
-      if (error) setError(error);
+      if (error) {
+        console.error('Error fetching smartflower items:', error);
+      }
       setSmartflowerItems(data);
     }
     fetchSmartflower();
@@ -74,7 +73,7 @@ export default function SmartflowerPage() {
           <Dragger 
             second={{ direction: 'h 1 3', gapX: true, paddingX: true, style: { paddingBottom: 'var(--hgt_header)' } }}
           >
-            {smartflowerItems.filter(item => item.position === 'Dragger').map((item, idx) => (
+            {smartflowerItems.filter(item => item.position === 'Dragger').map((item) => (
               <Card
                 key={item.id}
                 href={item.slug ? `/smartflower/${item.slug}` : `/smartflower/${item.id}`}
@@ -82,8 +81,6 @@ export default function SmartflowerPage() {
                 imageSrc={item.image_url || 'https://via.placeholder.com/275x155/007acc/ffffff?text=' + encodeURIComponent(item.title)}
                 imageAlt={item.title}
                 aspectRatio={['9:16','16:9','4:5','1:1'].includes(item.aspect_ratio || '') ? item.aspect_ratio as '9:16' | '16:9' | '4:5' | '1:1' : undefined}
-                tableName="smartflower"
-                recordId={item.id}
                 createdAt={item.created_at}
                 showDate={false}
               />

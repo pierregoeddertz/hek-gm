@@ -82,7 +82,6 @@ const chevronBtnStyle = {
   cursor: 'pointer',
   willChange: 'opacity',
 };
-const chevronBtnHoverStyle = { opacity: 0.33 };
 
 export default function Promoter({ tableName, filterMode = 'promoted' }: PromoterProps) {
   const [current, setCurrent] = useState(0);

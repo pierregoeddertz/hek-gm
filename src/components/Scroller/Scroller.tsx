@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 import styles from './Scroller.module.css';
 import Director from '../Director';
 import Accordion from '../Accordion';

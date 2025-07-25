@@ -30,7 +30,7 @@ export default function Text({
   id,
 }: TextProps) {
   const Tag = as;
-  let fontStyle: React.CSSProperties = {};
+  const fontStyle: React.CSSProperties = {};
   // if (fontLarge) {
   //   fontStyle = { fontSize: '2rem', lineHeight: '3rem' };
   // } else if (fontMid) {

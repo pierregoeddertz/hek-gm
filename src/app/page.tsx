@@ -5,12 +5,11 @@ import Unit from '../components/Unit';
 import Promoter from '../components/Promoter';
 import Director from '../components/Director';
 
-import { supabase, HekItem } from '../lib/supabase';
+import { supabase } from '../lib/supabase';
 import Arm from '../components/Arm/Arm';
 import Accordion from '../components/Accordion';
 import Dragger from '../components/Dragger';
 import Scroller from '../components/Scroller/Scroller';
-import Text from '../components/Text';
 import Marquee from 'react-fast-marquee';
 
 export default function Home() {
@@ -52,7 +51,6 @@ export default function Home() {
     }
   ];
   const [openStates, setOpenStates] = useState<boolean[]>(Array(accordionData.length).fill(false));
-  const [armHeight, setArmHeight] = useState<number | null>(null);
   const [hekIds, setHekIds] = useState<string[]>([]);
   const armRef = useRef<HTMLDivElement>(null);
   // 1. Lege für jeden Arm im Bedienbereich und in der Demo einen eigenen State an:
@@ -67,7 +65,7 @@ export default function Home() {
   const [showBackDemo4, setShowBackDemo4] = useState(false);
   useEffect(() => {
     if (armRef.current) {
-      setArmHeight(armRef.current.getBoundingClientRect().height);
+      // Entferne alle Vorkommen von setArmHeight, da armHeight bereits entfernt wurde und setArmHeight nicht mehr existiert.
     }
 
     // Lade die ersten 3 HEK-Artikel einmalig
@@ -87,7 +85,7 @@ export default function Home() {
 
     const handleResize = () => {
       if (armRef.current) {
-        setArmHeight(armRef.current.getBoundingClientRect().height);
+        // Entferne alle Vorkommen von setArmHeight, da armHeight bereits entfernt wurde und setArmHeight nicht mehr existiert.
       }
     };
     window.addEventListener('resize', handleResize);

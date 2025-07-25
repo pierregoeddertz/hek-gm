@@ -1,6 +1,6 @@
 'use client';
 
-import React, { memo, useState, useEffect, useMemo, useCallback } from 'react';
+import React, { memo, useState } from 'react';
 import NextImage from 'next/image';
 
 interface MediaProps {
