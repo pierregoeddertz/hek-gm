@@ -136,19 +136,23 @@ export default function Scroller({ accordionData }: ScrollerProps) {
       <div style={{ position: 'sticky', top: 0, width: '100%', height: '100vh', zIndex: 0, overflow: 'hidden' }}>
         {content}
       </div>
+      <Director style={{ marginTop: '-100vh' }}>
         <Unit second={{ spacingT: true, spacingB: true, widthMax: 1, style: { position: 'relative', zIndex: 1 }, className: styles.whiteText }}>
-          <Accordion
-            title={accordionData[0].title}
-            subtitle={accordionData[0].subtitle}
-            open={openStates[0]}
-            onClick={() => setOpenStates(states => {
-              const copy = [...states];
-              copy[0] = !copy[0];
-              return copy;
-            })}
-          >
-            {accordionData[0].content}
-          </Accordion>
+          {accordionData[0] && (
+            <Accordion
+              title={accordionData[0].title}
+              subtitle={accordionData[0].subtitle}
+              open={openStates[0]}
+              onClick={() => setOpenStates(states => {
+                const copy = [...states];
+                copy[0] = !copy[0];
+                return copy;
+              })}
+              armProps={{ vectorColor: 'var(--clrD_m)' }}
+            >
+              {accordionData[0].content}
+            </Accordion>
+          )}
         </Unit>
         <Unit second={{ spacingT: true, spacingB: true, widthMax: 1, style: { gap: 'var(--vlu_spacing_1)', position: 'relative', zIndex: 1 }, className: styles.whiteText }}>
           <Director as="ol" direction="v 2 1" style={{ gap: '.5rem', listStyle: 'none' }}>
@@ -174,6 +178,7 @@ export default function Scroller({ accordionData }: ScrollerProps) {
             <Text as="li" fontLarge>DFB Zentrale</Text>
           </Director>
         </Unit>
+    </Director>
     </Director>
   );
 }

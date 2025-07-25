@@ -1,7 +1,7 @@
 'use client';
 
+import React, { useRef, useEffect, useCallback, forwardRef } from "react";
 import styles from "./Arm.module.css";
-import { useRef, useCallback, useEffect, ReactNode, forwardRef } from "react";
 import Button from "../Button/Button";
 
 export type ArmProps = {
@@ -9,30 +9,34 @@ export type ArmProps = {
   side?: "left" | "right";
   openLabel?: string;
   closeLabel?: string;
-  label?: string; // Einfache Variante: nur ein Button
   showBack?: boolean;
-  children?: ReactNode;
-  className?: string;
-  onClick?: () => void;
-  href?: string;
+  onOpen?: () => void;
+  onClose?: () => void;
   style?: React.CSSProperties;
+  staticLabel?: string;
+  href?: string;
+  vectorColor?: string;
 };
 
 const Arm = forwardRef<HTMLDivElement, ArmProps>(function Arm({
   direction = "up",
   side = "left",
-  openLabel,
-  closeLabel,
-  label,
+  openLabel = "Öffnen",
+  closeLabel = "Schließen",
   showBack = false,
-  children,
-  onClick,
-  href,
+  onOpen,
+  onClose,
   style,
+  staticLabel,
+  href,
+  vectorColor,
 }, ref) {
+  const isTop = direction === "up";
+  const isLeft = side === "left";
   const vectorRef = useRef<HTMLDivElement>(null);
   const pathRef = useRef<SVGPathElement>(null);
 
+  // SVG-Path dynamisch anpassen
   const updatePath = useCallback(() => {
     const vectorEl = vectorRef.current;
     const pathEl = pathRef.current;
@@ -40,19 +44,17 @@ const Arm = forwardRef<HTMLDivElement, ArmProps>(function Arm({
     const w = vectorEl.clientWidth;
     const KINK = 12;
     let d: string;
-    if (side === "left") {
-      d =
-        direction === "down"
-          ? `M0 ${KINK} L${KINK} 0 L${w - 1} 0`
-          : `M0 0 L${KINK} ${KINK} L${w - 1} ${KINK}`;
+    if (isLeft) {
+      d = isTop
+        ? `M0 0 L${KINK} ${KINK} L${w - 1} ${KINK}`
+        : `M0 ${KINK} L${KINK} 0 L${w - 1} 0`;
     } else {
-      d =
-        direction === "down"
-          ? `M0 0 L${w - KINK} 0 L${w - 1} ${KINK}`
-          : `M0 ${KINK} L${w - KINK} ${KINK} L${w - 1} 0`;
+      d = isTop
+        ? `M0 ${KINK} L${w - KINK} ${KINK} L${w - 1} 0`
+        : `M0 0 L${w - KINK} 0 L${w - 1} ${KINK}`;
     }
     pathEl.setAttribute("d", d);
-  }, [direction, side]);
+  }, [isTop, isLeft]);
 
   useEffect(() => {
     updatePath();
@@ -63,30 +65,83 @@ const Arm = forwardRef<HTMLDivElement, ArmProps>(function Arm({
     return () => ro.disconnect();
   }, [updatePath]);
 
-  const rowClasses = `${styles.row} ${side === "right" ? styles.right : ""}`.trim();
+  // Alignment für row
+  const rowAlign = isTop ? "flex-start" : "flex-end";
 
-  return (
-    <div ref={ref} className={rowClasses} data-direction={direction} data-side={side} style={style}>
-      <div className={styles.vector} ref={vectorRef} >
-        <svg xmlns="http://www.w3.org/2000/svg">
-          <path ref={pathRef} stroke="var(--clrA_m)" strokeWidth="1" strokeLinecap="butt" fill="none" />
-        </svg>
-      </div>
+  // Reihenfolge: side
+  const vectorElement = (
+    <div className={styles.vector} ref={vectorRef}>
+      <svg xmlns="http://www.w3.org/2000/svg">
+        <path ref={pathRef} stroke={vectorColor || 'var(--clrA_m)'} strokeWidth="1" strokeLinecap="butt" fill="none" />
+      </svg>
+    </div>
+  );
+
+  if (staticLabel) {
+    const staticButton = (
       <div className={styles.btnContainer}>
-        {label ? (
-          <Button text={label} onClick={onClick} href={href} />
-        ) : openLabel && closeLabel ? (
-          <div className={styles.textContainer} style={{ cursor: 'pointer' }}>
-            <div className={`${styles.textInner} ${showBack ? styles.showBack : ""}`.trim()}>
-              <Button text={openLabel} onClick={onClick} href={href} />
-              <Button text={closeLabel} onClick={onClick} href={href} />
-            </div>
+        <div className={styles.textContainer}>
+          <div className={styles.textInner}>
+            <Button text={staticLabel} {...(href ? { href } : {})} />
           </div>
+        </div>
+      </div>
+    );
+    return (
+      <div
+        ref={ref}
+        className={styles.row}
+        data-direction={direction}
+        data-side={side}
+        style={{ alignItems: rowAlign, ...style }}
+      >
+        {isLeft ? (
+          <>
+            {vectorElement}
+            {staticButton}
+          </>
         ) : (
-          <span onClick={onClick} style={{ cursor: 'pointer' }}>{children}</span>
+          <>
+            {staticButton}
+            {vectorElement}
+          </>
         )}
+      </div>
+    );
+  }
+
+  const buttonContainer = (
+    <div className={styles.btnContainer}>
+      <div className={styles.textContainer}>
+        <div className={styles.textInner + (showBack ? ' ' + styles.showBack : '')}>
+          <Button text={openLabel} onClick={onOpen} tabIndex={showBack ? -1 : 0} />
+          <Button text={closeLabel} onClick={onClose} tabIndex={showBack ? 0 : -1} />
+        </div>
       </div>
     </div>
   );
+
+  return (
+    <div
+      ref={ref}
+      className={styles.row}
+      data-direction={direction}
+      data-side={side}
+      style={{ alignItems: rowAlign, ...style }}
+    >
+      {isLeft ? (
+        <>
+          {vectorElement}
+          {buttonContainer}
+        </>
+      ) : (
+        <>
+          {buttonContainer}
+          {vectorElement}
+        </>
+      )}
+    </div>
+  );
 });
+
 export default Arm; 

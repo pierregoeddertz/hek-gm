@@ -31,13 +31,14 @@ export default function Text({
 }: TextProps) {
   const Tag = as;
   let fontStyle: React.CSSProperties = {};
-  if (fontLarge) {
-    fontStyle = { fontSize: '2rem', lineHeight: '3rem' };
-  } else if (fontMid) {
-    fontStyle = { fontSize: '1.125rem' };
-  }
+  // if (fontLarge) {
+  //   fontStyle = { fontSize: '2rem', lineHeight: '3rem' };
+  // } else if (fontMid) {
+  //   fontStyle = { fontSize: '1.125rem' };
+  // }
+
   const computedStyle: React.CSSProperties = {
-    ...fontStyle,
+    // ...fontStyle, // entfernt, damit nur noch CSS-Klassen greifen
     textAlign: alignMap[align],
     ...style,
   };
@@ -52,7 +53,16 @@ export default function Text({
   }
 
   return (
-    <Tag className={className} style={computedStyle} {...additionalProps}>
+    <Tag
+      className={[
+        className,
+        fontLarge ? 'fontLarge' : '',
+        fontMid ? 'fontMid' : '',
+        align ? `align${align}` : '',
+      ].filter(Boolean).join(' ')}
+      style={computedStyle}
+      {...additionalProps}
+    >
       {children}
     </Tag>
   );

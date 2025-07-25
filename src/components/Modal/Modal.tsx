@@ -12,7 +12,9 @@ export default function Modal({ children }: ModalProps) {
   const router = useRouter();
   const modalRef = useRef<HTMLDivElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
+  const overlayRef = useRef<HTMLDivElement>(null);
   const [isClosing, setIsClosing] = useState(false);
+  const [overlayVisible, setOverlayVisible] = useState(false);
 
   const handleClose = useCallback(() => {
     if (isClosing) return;
@@ -24,11 +26,18 @@ export default function Modal({ children }: ModalProps) {
     const scrollY = window.scrollY;
     const scrollX = window.scrollX;
     
-    // Start closing animation
+    // Start closing animation - Overlay und Panel animieren parallel
+    console.log('Starting close animation');
+    
+    // Panel animieren
     htmlElement.classList.add('sidepanel-closing'); // keep sidepanel-open
+    
+    // Overlay animieren
+    setOverlayVisible(false);
 
     // Warte exakt die Transition-Dauer, dann Navigation & Cleanup
     setTimeout(() => {
+      console.log('Animation finished, cleaning up');
       htmlElement.classList.remove('sidepanel-open');
       htmlElement.classList.remove('sidepanel-closing');
       htmlElement.style.overflow = '';
@@ -53,7 +62,9 @@ export default function Modal({ children }: ModalProps) {
     // Panel öffnen (nur ein einziges Mal beim Mount)
     // Kurze Verzögerung für Animation - startet im nächsten Frame
     requestAnimationFrame(() => {
+      console.log('Starting open animation');
       htmlElement.classList.add('sidepanel-open');
+      setOverlayVisible(true);
     });
 
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -80,11 +91,20 @@ export default function Modal({ children }: ModalProps) {
       ref={modalRef}
       className={styles.modal}
     >
-      <div className="sidepanel-overlay"></div>
+      <div 
+        ref={overlayRef}
+        className="sidepanel-overlay"
+        onClick={handleClose}
+        style={{
+          opacity: overlayVisible ? 1 : 0,
+          transition: 'opacity 750ms cubic-bezier(0.8, 0, 0.25, 1)'
+        }}
+      ></div>
       <div 
         ref={contentRef}
         data-modal-panel
         className={styles.content}
+        onClick={(e) => e.stopPropagation()}
       >
         <button 
           className={styles.closeButton}

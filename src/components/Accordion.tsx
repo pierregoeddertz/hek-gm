@@ -1,6 +1,6 @@
 import React, { useRef, useEffect } from 'react';
 import Director from './Director';
-import Arm from './Arm/Arm';
+import Arm, { ArmProps } from './Arm/Arm';
 import Text from './Text';
 
 export interface AccordionProps {
@@ -9,9 +9,10 @@ export interface AccordionProps {
   open: boolean;
   onClick: () => void;
   children?: React.ReactNode;
+  armProps?: Partial<ArmProps>;
 }
 
-export default function Accordion({ title, subtitle, open, onClick, children }: AccordionProps) {
+export default function Accordion({ title, subtitle, open, onClick, children, armProps }: AccordionProps) {
   const accRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -21,15 +22,16 @@ export default function Accordion({ title, subtitle, open, onClick, children }: 
   }, [children, open]);
 
   return (
-    <Director direction="v 1 1" spacingT widthMax={3}>
-      <div style={{ marginBottom: '1rem' }}>
+    <Director direction="v 1 1" spacingT gapY widthMax={3}  >
+      <Director direction="v 1 1" gapY >
         <Text as="h2" align={1}>{title}</Text>
         {subtitle && <Text as="h3" align={1} fontLarge>{subtitle}</Text>}
-      </div>
+      </Director >
       {children && (
-        <div ref={accRef} style={{ overflow: 'hidden', transition: 'max-height var(--anm)' }} aria-hidden={!open}>
+        <Director direction="v 1 1" ref={accRef} style={{ overflow: 'hidden', transition: 'max-height var(--anm)' }} aria-hidden={!open}>
           {children}
-        </div>
+          <div style={{ minHeight: '1rem', width: '100%' }} />
+        </Director>
       )}
       <Arm
         direction="up"
@@ -37,7 +39,9 @@ export default function Accordion({ title, subtitle, open, onClick, children }: 
         openLabel="Mehr erfahren"
         closeLabel="Zurück"
         showBack={open}
-        onClick={onClick}
+        onOpen={onClick}
+        onClose={onClick}
+        {...(armProps || {})}
       />
     </Director>
   );

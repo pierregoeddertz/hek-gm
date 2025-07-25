@@ -13,9 +13,4 @@
 .core:hover,
 .core:focus {
   opacity: .33;
-}
-
-.underline {
-  text-decoration: underline;
-  text-underline-offset: 2px;
 } 

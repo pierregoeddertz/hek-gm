@@ -25,6 +25,7 @@ const Unit: React.FC<UnitProps> = ({ first = {}, second = {}, children }) => {
     <Director
       as="section"
       {...first}
+      data-get_colordom={first.colorDom ? '' : undefined}
     >
       <Director
         direction="v 1 1"

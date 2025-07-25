@@ -17,9 +17,9 @@ export default async function NewsPage() {
     console.error('Error loading news:', error);
   }
 
-  // Duplicate first item 20x to fill list (demo purpose)
+  // Use all news items from database (doubled for debugging)
   const displayItems: NewsItem[] | null = newsItems && newsItems.length > 0
-    ? Array.from({ length: 20 }, () => newsItems[0])
+    ? [...newsItems, ...newsItems]
     : newsItems;
 
   return (
@@ -27,15 +27,19 @@ export default async function NewsPage() {
       <h1 className="visually-hidden">News</h1>
       
       {displayItems && displayItems.length > 0 && (
-        <Unit second={{ paddingX: false }}>
-          <Dragger second={{ heightFull: true, direction: 'h 1 3', gapX: true, paddingX: true, style: { paddingBottom: 'var(--hgt_header)' } }}>
+        <Unit first={{ direction: 'v 3 1', style: { minHeight: '100vh' } }} second={{ spacingT: true, paddingX: false }}>
+          <Dragger 
+            second={{ direction: 'h 1 3', gapX: true, paddingX: true, style: { paddingBottom: 'var(--hgt_header)' } }}
+          >
             {displayItems.map((item: NewsItem, idx) => (
               <Card
                 key={idx}
-                href={`/news/${item.id}`}
+                href={item.slug ? `/news/${item.slug}` : `/news/${item.id}`}
                 title={item.title}
+                subtitle={item.subtitle}
                 imageSrc={item.image_url || 'https://via.placeholder.com/275x155/007acc/ffffff?text=' + encodeURIComponent(item.title)}
                 imageAlt={item.title}
+                aspectRatio={['9:16','16:9','4:5','1:1'].includes(item.aspect_ratio || '') ? item.aspect_ratio as any : undefined}
                 tableName="news"
                 recordId={item.id}
                 createdAt={item.created_at}

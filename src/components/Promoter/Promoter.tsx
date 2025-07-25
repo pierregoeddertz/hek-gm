@@ -22,6 +22,7 @@ export interface PromoterItem {
 
 interface PromoterProps {
   tableName: string | string[];
+  filterMode?: 'promoted' | 'position'; // Default: 'promoted'
 }
 
 const promoterStyles = {
@@ -71,13 +72,27 @@ const promoterStyles = {
   },
 };
 
-export default function Promoter({ tableName }: PromoterProps) {
+const chevronBtnStyle = {
+  background: 'none',
+  border: 'none',
+  padding: 0,
+  display: 'flex',
+  alignItems: 'center',
+  transition: 'opacity 0.2s',
+  cursor: 'pointer',
+  willChange: 'opacity',
+};
+const chevronBtnHoverStyle = { opacity: 0.33 };
+
+export default function Promoter({ tableName, filterMode = 'promoted' }: PromoterProps) {
   const [current, setCurrent] = useState(0);
   const [isVisible, setIsVisible] = useState(false);
   const [isTransitioning, setIsTransitioning] = useState(false);
   const [items, setItems] = useState<PromoterItem[]>([]);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [leftHover, setLeftHover] = useState(false);
+  const [rightHover, setRightHover] = useState(false);
 
   const fetchData = useCallback(async () => {
     setIsLoading(true);
@@ -86,11 +101,14 @@ export default function Promoter({ tableName }: PromoterProps) {
       const allItems: PromoterItem[] = [];
 
       for (const table of tableNames) {
-        const { data, error } = await supabase
-          .from(table)
-          .select('*')
-          .eq('promoted', true)
-          .order('created_at', { ascending: false });
+        let query = supabase.from(table).select('*');
+        if (filterMode === 'position' && table === 'smartflower') {
+          query = query.eq('position', 'Promoter');
+        } else if (filterMode === 'promoted') {
+          query = query.eq('promoted', true);
+        }
+        query = query.order('created_at', { ascending: false });
+        const { data, error } = await query;
         
         if (error) {
           console.error(`Error loading from ${table}:`, error);
@@ -132,7 +150,7 @@ export default function Promoter({ tableName }: PromoterProps) {
     } finally {
       setIsLoading(false);
     }
-  }, [tableName]);
+  }, [tableName, filterMode]);
 
   useEffect(() => {
     fetchData();
@@ -140,12 +158,9 @@ export default function Promoter({ tableName }: PromoterProps) {
 
   useEffect(() => {
     if (items.length > 0) {
-      // Kleine Verzögerung für bessere Initial-Animation
-      setTimeout(() => {
-        setIsVisible(true);
-      }, 100);
+      setIsVisible(true); // Sofort sichtbar!
     }
-  }, [items.length]); // Nur die Länge als Dependency, nicht das gesamte Array
+  }, [items.length]);
 
   // Slideshow-Timer
   useEffect(() => {
@@ -196,82 +211,152 @@ export default function Promoter({ tableName }: PromoterProps) {
     };
   }, [items.map(item => item.image_url).join(',')]); // Stabilere Dependency
 
-  if (error) {
-    return (
-      <Director direction="v 2 2" style={promoterStyles.core}>
-        <Text as="p" align={2}>Fehler beim Laden: {error}</Text>
-      </Director>
-    );
-  }
-
-  if (items.length === 0) {
-    return (
-      <Director direction="v 2 2" style={promoterStyles.core}>
-        {!isLoading && <Text as="p" align={2}>Keine Inhalte verfügbar</Text>}
-      </Director>
-    );
-  }
-
-  const currentItem = items[current];
-  
-  // Saubere Transition-Kontrolle - nur EIN Bild zur Zeit sichtbar
-  const shouldShowMedia = isVisible && !isTransitioning && currentItem;
-  
-  const mediaStyle = {
-    ...promoterStyles.media,
-    ...(shouldShowMedia ? promoterStyles.mediaVisible : promoterStyles.mediaHidden),
-  };
-
-  const headlineStyle = {
-    ...promoterStyles.headlineFade,
-    ...(shouldShowMedia ? promoterStyles.headlineFadeVisible : promoterStyles.headlineFadeHidden),
-  };
-
   return (
     <Director direction="v 2 2" style={promoterStyles.core}>
-      {/* Background Media */}
-      <Media
-        src={currentItem.image_url}
-        alt={currentItem.title || 'Promoter Slide'}
-        aspectRatio="16:9"
-        style={mediaStyle}
-        priority
-        sizes="100vw"
-      />
-      
-      {/* Content Overlay */}
-      <Director 
-        direction="v 3 3" 
-        heightFull 
-        paddingY 
-        widthMax={2} 
-        paddingX 
-        style={promoterStyles.verbal}
-      >
-        <Unit
-          second={{
-            widthMax: 3,
-            gapY: true,
-            style: { paddingBottom: 'var(--hgt_header)' }
-          }}
-        >
-          <Director direction="v 3 2" gapY style={headlineStyle}>
-            <Text as="h2" align={2} style={{ color: 'var(--clrL_a)' }}>
-              {currentItem.title || ''}
-            </Text>
-            {currentItem.subtitle && (
-              <Text as="h3" align={2} fontLarge style={{ color: 'var(--clrL_a)' }}>
-                {currentItem.subtitle}
-              </Text>
-            )}
-            <Button 
-              href={`/${currentItem.tableName}/${currentItem.id}`}
-              text="Mehr erfahren"
-              style={{ color: 'var(--clrL_a)' }}
-            />
+      {error && (
+        <Text as="p" align={2}>Fehler beim Laden: {error}</Text>
+      )}
+      {!isLoading && items.length === 0 && (
+        <Text as="p" align={2}>Keine Inhalte verfügbar</Text>
+      )}
+      {!isLoading && items.length > 0 && (() => {
+        const currentItem = items[current];
+        if (!currentItem) return null;
+        const shouldShowMedia = isVisible && !isTransitioning && currentItem;
+        const mediaStyle = {
+          ...promoterStyles.media,
+          ...(shouldShowMedia ? promoterStyles.mediaVisible : promoterStyles.mediaHidden),
+        };
+        const headlineStyle = {
+          ...promoterStyles.headlineFade,
+          ...(shouldShowMedia ? promoterStyles.headlineFadeVisible : promoterStyles.headlineFadeHidden),
+        };
+        return <>
+          {/* Background Media */}
+          <Media
+            src={currentItem.image_url}
+            alt={currentItem.title || 'Promoter Slide'}
+            style={{ ...mediaStyle, height: '100%' }}
+            priority
+            sizes="100vw"
+          />
+          {/* Content Overlay */}
+          <Director 
+            direction="v 3 3" 
+            heightFull 
+            paddingY 
+            widthMax={2} 
+            paddingX 
+            style={promoterStyles.verbal}
+          >
+            <Unit
+              second={{
+                widthMax: 3,
+                gapY: true,
+                style: { paddingBottom: 'var(--hgt_header)' }
+              }}
+            >
+              <Director direction="v 3 2" gapY style={headlineStyle}>
+                {/* Headline mit Chevrons */}
+                <Director direction="h 2 2" gapX style={{ alignItems: 'center', justifyContent: 'center', width: '100%', gap: '0.33rem', display: 'flex' }}>
+                  {/* Left Chevron */}
+                  {items.length > 1 && (
+                    <button
+                      aria-label="Vorheriger Slide"
+                      onClick={() => {
+                        if (!isTransitioning) {
+                          setIsTransitioning(true);
+                          setIsVisible(false);
+                          setTimeout(() => {
+                            setCurrent((prev) => (prev - 1 + items.length) % items.length);
+                            setTimeout(() => {
+                              setIsVisible(true);
+                              setIsTransitioning(false);
+                            }, 100);
+                          }, 450);
+                        }
+                      }}
+                      disabled={isTransitioning}
+                      onMouseEnter={() => setLeftHover(true)}
+                      onMouseLeave={() => setLeftHover(false)}
+                      onFocus={() => setLeftHover(true)}
+                      onBlur={() => setLeftHover(false)}
+                      style={{ ...chevronBtnStyle, cursor: !isTransitioning ? 'pointer' : 'default', marginTop: '0.0625rem', opacity: isTransitioning ? 0.5 : (leftHover ? 1 : 0.33) }}
+                    >
+                      <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <polyline points="13,5 7,10 13,15" stroke="var(--clrL_a)" strokeWidth="1" strokeLinecap="butt" strokeLinejoin="miter" fill="none" />
+                      </svg>
+                    </button>
+                  )}
+                  {/* Headline */}
+                  <Text as="h2" align={2} style={{ color: 'var(--clrL_a)', display: 'flex', alignItems: 'center' }}>
+                    {currentItem.title || ''}
+                  </Text>
+                  {/* Right Chevron */}
+                  {items.length > 1 && (
+                    <button
+                      aria-label="Nächster Slide"
+                      onClick={() => {
+                        if (!isTransitioning) {
+                          setIsTransitioning(true);
+                          setIsVisible(false);
+                          setTimeout(() => {
+                            setCurrent((prev) => (prev + 1) % items.length);
+                            setTimeout(() => {
+                              setIsVisible(true);
+                              setIsTransitioning(false);
+                            }, 100);
+                          }, 450);
+                        }
+                      }}
+                      disabled={isTransitioning}
+                      onMouseEnter={() => setRightHover(true)}
+                      onMouseLeave={() => setRightHover(false)}
+                      onFocus={() => setRightHover(true)}
+                      onBlur={() => setRightHover(false)}
+                      style={{ ...chevronBtnStyle, cursor: !isTransitioning ? 'pointer' : 'default', marginTop: '0.0625rem', opacity: isTransitioning ? 0.5 : (rightHover ? 1 : 0.33) }}
+                    >
+                      <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <polyline points="7,5 13,10 7,15" stroke="var(--clrL_a)" strokeWidth="1" strokeLinecap="butt" strokeLinejoin="miter" fill="none" />
+                      </svg>
+                    </button>
+                  )}
+                </Director>
+                {/* Subheadline darunter */}
+                {currentItem.subtitle && (
+                  <Text as="h3" align={2} fontLarge style={{ marginTop: '-.33rem', color: 'var(--clrL_a)' }}>
+                    {currentItem.subtitle}
+                  </Text>
+                )}
+                {current === 0 && currentItem.tableName === 'smartflower' ? (
+                  <Button 
+                    href="mailto:smartflower@hek-gm.de"
+                    text="Jetzt anfragen"
+                    underline={true}
+                    aria-label="Kontakt"
+                    style={{ color: 'var(--clrL_a)' }}
+                  />
+                ) : currentItem.tableName === 'smartflower' ? (
+                  <Button 
+                    href="/smartflower"
+                    text="Mehr erfahren"
+                    underline={true}
+                    style={{ color: 'var(--clrL_a)' }}
+                  />
+                ) : (
+                  <Button 
+                    href={`/${currentItem.tableName}/${currentItem.id}`}
+                    text="Mehr erfahren"
+                    underline={true}
+                    style={{ color: 'var(--clrL_a)' }}
+                  />
+                )}
+              </Director>
+            </Unit>
           </Director>
-        </Unit>
-      </Director>
+        </>;
+      })()}
+      {/* Während des Ladens bleibt der Bereich leer, aber das Grundlayout ist da */}
     </Director>
   );
 } 

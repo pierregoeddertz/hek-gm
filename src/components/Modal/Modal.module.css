@@ -16,7 +16,7 @@
 }
 
 .content {
-  background-color: white;
+  background-color: var(--clrA_a);
   position: fixed;
   top: 0;
   right: 0;

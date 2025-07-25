@@ -70,6 +70,10 @@ const Media = memo(({
     const videoStyle = {
       ...mediaStyles.mediaVideo,
       ...mediaStyle,
+      width: '100%',
+      height: style.height || 'auto',
+      display: 'block',
+      maxWidth: '100%',
     };
 
     return (
@@ -94,11 +98,13 @@ const Media = memo(({
   const spanStyle = {
     ...mediaStyles.media,
     ...mediaStyle,
+    outline: '1px solid var(--clrA_m)',
   };
 
   const imageStyle = {
     ...mediaStyles.mediaImage,
     objectFit: 'cover' as const,
+    height: style.height || undefined,
   };
 
   return (
@@ -110,7 +116,6 @@ const Media = memo(({
         style={imageStyle}
         sizes={sizes}
         priority={priority}
-        title={title || alt}
         loading={priority ? undefined : "lazy"}
         onError={handleError} 
       />

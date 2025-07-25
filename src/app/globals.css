@@ -81,7 +81,7 @@ html {
   --headerpanel-x: 0%;
 }
 
-body {
+html, body {
   background: var(--clrA_a);
 }
 
@@ -94,7 +94,7 @@ html.headerpanel-open {
   --headerpanel-x: 50vw;
 }
 
-html.sidepanel-closing {
+html.sidepanel-open.sidepanel-closing {
   --panel-x: 100%;
   --container-x: 0%;
 }
@@ -116,24 +116,33 @@ html.sidepanel-closing {
   height: 100vh;
   background: rgba(0, 0, 0, 0.5);
   z-index: 999;
-  pointer-events: none;
+  pointer-events: auto;
+  cursor: pointer;
   opacity: 0;
-  transition: opacity var(--anm);
+  transition: opacity 750ms cubic-bezier(0.8, 0, 0.25, 1);
+  will-change: opacity;
 }
 
 html.sidepanel-open .sidepanel-overlay {
-  opacity: 1;
+  opacity: 1 !important;
 }
+
+html.sidepanel-open.sidepanel-closing .sidepanel-overlay {
+  opacity: 0 !important;
+}
+
+
 
 .shiftable {
   transform: translateX(calc(var(--container-x) + var(--headerpanel-x)));
-  transition: transform var(--anm);
+  transition: transform 750ms cubic-bezier(0.8, 0, 0.25, 1);
 }
 
 /* Sidepanel Animation - nutzt CSS-Variable */
 [data-modal-panel] {
   transform: translateX(var(--panel-x));
-  transition: transform var(--anm);
+  transition: transform 750ms cubic-bezier(0.8, 0, 0.25, 1);
+  will-change: transform;
 }
 
 .visually-hidden {
@@ -146,4 +155,32 @@ overflow: hidden !important;
 clip: rect(0 0 0 0) !important;
 white-space: nowrap !important;
 border: 0 !important;
+}
+
+/* Restore focus outline for interactive elements */
+button:focus-visible,
+[role="button"]:focus-visible,
+a:focus-visible,
+[tabindex]:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible {
+  outline: 2px solid var(--clrL_b);
+  outline-offset: 2px;
+}
+
+.fontLarge {
+  font-size: 2rem;
+  line-height: 3rem;
+}
+
+.fontMid {
+  font-size: 1.125rem;
+}
+
+@media (max-width: 700px) {
+  .fontLarge {
+    font-size: 1.75rem;
+    line-height: 2.5rem;
+  }
 }

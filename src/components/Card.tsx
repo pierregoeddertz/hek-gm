@@ -5,13 +5,16 @@ import Link from 'next/link';
 import Media from './Media';
 import Director from './Director';
 import Text from './Text';
+import HList from './HList';
 import { supabase } from '../lib/supabase';
 
 interface CardProps {
   href: string;
   title: string;
+  subtitle?: string | null;
   imageSrc: string;
   imageAlt: string;
+  aspectRatio?: '9:16' | '16:9' | '4:5' | '1:1';
   tableName?: string;
   recordId?: string;
   createdAt?: string;
@@ -22,8 +25,10 @@ interface CardProps {
 export default function Card({
   href,
   title,
+  subtitle,
   imageSrc,
   imageAlt,
+  aspectRatio,
   tableName,
   recordId,
   createdAt,
@@ -39,18 +44,8 @@ export default function Card({
   }, []);
 
   const handleClick = useCallback(async () => {
-    if (tableName && recordId) {
-      try {
-        await supabase.rpc('increment_view_count', {
-          row_id: recordId,
-          table_name: tableName,
-        });
-      } catch (err) {
-        console.error('Error incrementing view count', err);
-        onError?.(err);
-      }
-    }
-  }, [tableName, recordId, onError]);
+    // entfernt: view count logic
+  }, []);
 
   const formattedTime = useMemo(
     () =>
@@ -72,19 +67,33 @@ export default function Card({
 
   return (
     <Link href={href} passHref onClick={handleClick}>
-        <Director direction="v 1 1" gapY style={{ width: 'var(--max_w_4)' }}>
-          {showDate && formattedTime && formattedDate && (
-            <Director direction="h 1 1" gapX style={{ marginBottom: '-0.666rem' }}>
-              <Text as="time" dateTime={createdAt}>
-                {formattedTime}
-              </Text>
-              <Text as="time" dateTime={createdAt}>
-                {formattedDate}
-              </Text>
-            </Director>
-          )}
-          <Text as="h2" fontMid>{title}</Text>
-          <Media src={imageSrc} alt={imageAlt} />
+        <Director 
+          direction="v 1 1" 
+          gapY 
+          style={{ 
+            width: 'var(--max_w_4)',
+            transition: 'transform 0.2s ease-in-out',
+            cursor: 'pointer',
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.transform = 'scale(0.95)';
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.transform = 'scale(1)';
+          }}
+        >
+          <Director direction="v 1 1" gapY style={{ paddingLeft: '.75rem', paddingRight: '.75rem' }}>
+            {showDate && formattedTime && formattedDate && (
+              <HList 
+                items={[
+                  <Text key="time" as="time" dateTime={createdAt}>{formattedTime}</Text>,
+                  <Text key="date" as="time" dateTime={createdAt}>{formattedDate}</Text>
+                ]} 
+              />
+            )}
+            <Text as="h2" fontMid>{title}</Text>
+          </Director>
+          <Media src={imageSrc} alt={imageAlt} aspectRatio={aspectRatio} style={{ height: '100%' }} />
         </Director>
     </Link>
   );

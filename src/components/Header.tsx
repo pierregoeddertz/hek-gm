@@ -3,6 +3,8 @@
 import React, { memo, useRef, useEffect, useCallback, useState } from 'react';
 import Director from './Director';
 import Button from './Button';
+import HList from './HList';
+import { usePathname } from 'next/navigation';
 
 export type HeaderProps = {
   right?: React.ReactNode | null;
@@ -22,6 +24,7 @@ const headerStyles = {
 const Header = memo(({ right: _, className = '' }: HeaderProps) => {
   const headerRef = useRef<HTMLDivElement>(null);
   const [menuOpen, setMenuOpen] = useState(false);
+  const pathname = usePathname();
 
   const checkColorDomElements = useCallback(() => {
     if (!headerRef.current) return;
@@ -136,7 +139,7 @@ const Header = memo(({ right: _, className = '' }: HeaderProps) => {
         as='header'
         ref={headerRef}
         className={`header ${className}`.trim()}
-        style={headerStyles.core}
+        style={{ ...headerStyles.core, pointerEvents: 'none' }}
         direction="v 1 2"
         gapY
         paddingX
@@ -147,62 +150,6 @@ const Header = memo(({ right: _, className = '' }: HeaderProps) => {
         </svg>
         
         <Director direction="h 2 4" style={{ width: '100%', alignItems: 'center', justifyContent: 'space-between' }}>
-          {/* Linke Seite - Menü Button auskommentiert
-          <button
-            onClick={handleMenuClick}
-            aria-label="Menü öffnen"
-            style={{ 
-              background: 'none', 
-              border: 'none', 
-              cursor: 'pointer',
-              paddingRight: '.75rem',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center'
-            }}
-            onMouseEnter={(e) => e.currentTarget.style.opacity = '0.33'}
-            onMouseLeave={(e) => e.currentTarget.style.opacity = '1'}
-          >
-            <svg height="1rem" viewBox="0 0 79 58" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M37.4004 46.7227L47.2283 57.778H0.250488V46.7227H37.4004Z" fill="currentColor"/>
-              <path d="M53.2841 23.5586L63.1119 34.614H0.250488V23.5586H53.2841Z" fill="currentColor"/>
-              <path d="M69.1677 0.390625L78.9956 11.446H0.250488V0.390625H69.1677Z" fill="currentColor"/>
-            </svg>
-          </button>
-          */}
-
-          {/* Navigation Links - ohne asModal = normale SPA Navigation */}
-          <Director direction="h 2 2" gapX style={{ alignItems: 'center', width: 'auto' }}>
-            <Button
-              text="News"
-              href="/news"
-              aria-label="News"
-            />
-            <Button
-              text="Smartflower"
-              href="/smartflower"
-              aria-label="Smartflower"
-            />
-          </Director>
-
-          <Director direction="h 1 1" style={{ alignItems: 'center', gap: '1rem' }}>
-            <svg 
-              width="2" 
-              height="1rem" 
-              viewBox="0 0 3 20" 
-              fill="none" 
-              xmlns="http://www.w3.org/2000/svg"
-              style={{ transform: 'rotate(20deg)' }}
-            >
-              <line x1="1.5" y1="0" x2="1.5" y2="20" stroke="var(--clrA_m)" strokeWidth="2"/>
-            </svg>
-            <Button
-              text="Kontakt"
-              href="mailto:smartflower@hek-gm.de"
-              aria-label="Kontakt"
-            />
-          </Director>
-          
           <button
             onClick={handleLogoClick}
             aria-label="HEK Logo / Home"
@@ -212,12 +159,12 @@ const Header = memo(({ right: _, className = '' }: HeaderProps) => {
               cursor: 'pointer',
               display: 'flex',
               alignItems: 'center',
-              justifyContent: 'center'
+              pointerEvents: 'auto',
             }}
             onMouseEnter={(e) => e.currentTarget.style.opacity = '0.33'}
             onMouseLeave={(e) => e.currentTarget.style.opacity = '1'}
           >
-            <svg height="1rem" viewBox="0 0 174 62" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <svg viewBox="0 0 174 62" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ height: '1rem' }}>
               <path d="M13.8162 61.7924H0.0712891V8.62055L13.8162 0.375V61.7924Z" fill="currentColor"/>
               <path d="M51.9192 53.4932L38.088 61.7924V36.2153H22.3979L13.8162 24.2989H38.088V0.375H51.9192V53.4932Z" fill="currentColor"/>
               <path d="M108.77 12.205H78.7555V49.96H109.29L100.772 61.7924H65.0108V12.205L73.5294 0.375H108.77V12.205Z" fill="currentColor"/>
@@ -226,6 +173,17 @@ const Header = memo(({ right: _, className = '' }: HeaderProps) => {
               <path d="M106.159 36.2153H87.0876L78.7555 24.6468H106.159V36.2153Z" fill="currentColor"/>
             </svg>
           </button>
+
+          <HList
+            items={[
+              <Button key="smartflower" text="Smartflower" href="/smartflower" aria-label="Smartflower" active={pathname === '/smartflower' || pathname.startsWith('/smartflower/')} style={{ pointerEvents: 'auto' }} />, 
+              <Button key="news" text="News" href="/news" aria-label="News" active={pathname === '/news' || pathname.startsWith('/news/')} style={{ pointerEvents: 'auto' }} />, 
+              <Button key="kontakt" text="Kontakt" href="mailto:smartflower@hek-gm.de" aria-label="Kontakt" active={pathname.startsWith('mailto:smartflower@hek-gm.de')} style={{ pointerEvents: 'auto' }} />
+            ]}
+            marginBottom="0"
+            alignItems="center"
+            style={{ flex: 0 }}
+          />
         </Director>
       </Director>
     </>
