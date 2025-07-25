@@ -14,7 +14,7 @@ import '../globals.css';
 export default function SmartflowerPage() {
   const [openStates, setOpenStates] = useState<boolean[]>([false, false]);
   const [smartflowerItems, setSmartflowerItems] = useState<SmartflowerItem[] | null>(null);
-  const [error, setError] = useState<any>(null);
+  const [error, setError] = useState<unknown>(null);
 
   const accordionData = [
     {
@@ -81,7 +81,7 @@ export default function SmartflowerPage() {
                 title={item.title}
                 imageSrc={item.image_url || 'https://via.placeholder.com/275x155/007acc/ffffff?text=' + encodeURIComponent(item.title)}
                 imageAlt={item.title}
-                aspectRatio={['9:16','16:9','4:5','1:1'].includes(item.aspect_ratio || '') ? item.aspect_ratio as any : undefined}
+                aspectRatio={['9:16','16:9','4:5','1:1'].includes(item.aspect_ratio || '') ? item.aspect_ratio as '9:16' | '16:9' | '4:5' | '1:1' : undefined}
                 tableName="smartflower"
                 recordId={item.id}
                 createdAt={item.created_at}

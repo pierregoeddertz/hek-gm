@@ -65,7 +65,7 @@ const Button = forwardRef<HTMLButtonElement | HTMLAnchorElement, ButtonProps & A
     }
 
     // Für alle Links (auch mailto, tel, http/https) immer Next.js Link
-    let linkProps: any = {};
+    let linkProps: Record<string, unknown> = {};
     if (/^(https?:|mailto:|tel:)/.test(href)) {
       linkProps = {
         target: '_blank',
