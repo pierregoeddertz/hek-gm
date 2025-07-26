@@ -21,9 +21,8 @@ const headerStyles = {
   },
 };
 
-const Header = memo(({ right: _, className = '' }: HeaderProps) => {
+const Header = memo(({ right, className = '' }: HeaderProps) => {
   const headerRef = useRef<HTMLDivElement>(null);
-  const [menuOpen, setMenuOpen] = useState(false);
   const pathname = usePathname();
 
   const checkColorDomElements = useCallback(() => {

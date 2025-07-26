@@ -9,14 +9,14 @@ import Button from '../../../components/Button';
 export default function CookiePolicyPage() {
   useEffect(() => {
     // Ensure the openCookieSettings function is available
-    if (typeof window !== 'undefined' && !(window as any).openCookieSettings) {
+    if (typeof window !== 'undefined' && !(window as unknown as { openCookieSettings?: () => void }).openCookieSettings) {
       console.warn('Cookie settings function not available');
     }
   }, []);
 
   const handleOpenSettings = () => {
-    if (typeof window !== 'undefined' && (window as any).openCookieSettings) {
-      (window as any).openCookieSettings();
+    if (typeof window !== 'undefined' && (window as unknown as { openCookieSettings?: () => void }).openCookieSettings) {
+      (window as unknown as { openCookieSettings: () => void }).openCookieSettings();
     }
   };
 

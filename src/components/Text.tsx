@@ -30,12 +30,7 @@ export default function Text({
   id,
 }: TextProps) {
   const Tag = as;
-  const fontStyle: React.CSSProperties = {};
-  // if (fontLarge) {
-  //   fontStyle = { fontSize: '2rem', lineHeight: '3rem' };
-  // } else if (fontMid) {
-  //   fontStyle = { fontSize: '1.125rem' };
-  // }
+  // Removed unused fontStyle variable
 
   const computedStyle: React.CSSProperties = {
     // ...fontStyle, // entfernt, damit nur noch CSS-Klassen greifen

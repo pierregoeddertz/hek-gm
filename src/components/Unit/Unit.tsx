@@ -19,7 +19,7 @@ const Unit: React.FC<UnitProps> = ({ first = {}, second = {}, children }) => {
   }
   
   // padding0 aus den Props entfernen, da es nicht an Director weitergegeben werden soll
-  const { padding0: _, ...secondPropsWithoutPadding0 } = secondProps;
+  const { padding0, ...secondPropsWithoutPadding0 } = secondProps;
 
   return (
     <Director

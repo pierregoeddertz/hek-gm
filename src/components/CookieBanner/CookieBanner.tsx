@@ -50,9 +50,9 @@ export default function CookieBanner() {
   // Expose function globally for use on cookie page
   useEffect(() => {
     if (typeof window !== 'undefined') {
-      (window as any).openCookieSettings = openSettings;
+      (window as unknown as { openCookieSettings: () => void }).openCookieSettings = openSettings;
     }
-  }, []);
+  }, [openSettings]);
 
   const applyConsentSettings = (settings: CookieConsent) => {
     // Apply analytics consent

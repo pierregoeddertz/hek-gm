@@ -194,12 +194,12 @@ export default function Promoter({ tableName, filterMode = 'promoted' }: Promote
 
   // Preload-Effekt für bessere Performance
   useEffect(() => {
-    if (items.length === 0) return;
-    
+    const imageUrls = items.map(item => item.image_url).join(',');
     const preloadImages: HTMLImageElement[] = [];
-    items.forEach((item) => {
-      if (item.image_url && !item.image_url.match(/\.(mp4|webm|ogg)$/i)) {
-        const img = new window.Image();
+    
+    items.forEach(item => {
+      if (item.image_url) {
+        const img = new Image();
         img.src = item.image_url;
         preloadImages.push(img);
       }
@@ -208,7 +208,7 @@ export default function Promoter({ tableName, filterMode = 'promoted' }: Promote
     return () => {
       preloadImages.length = 0;
     };
-  }, [items.map(item => item.image_url).join(',')]); // Stabilere Dependency
+  }, [items]); // Simplified dependency array
 
   return (
     <Director direction="v 2 2" style={promoterStyles.core}>

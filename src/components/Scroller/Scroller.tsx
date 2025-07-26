@@ -32,7 +32,6 @@ export default function Scroller({ accordionData }: ScrollerProps) {
   const [items, setItems] = useState<ReferenzenItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
-  const [imagesLoaded, setImagesLoaded] = useState<Set<string>>(new Set());
   const [openAccordionIndex, setOpenAccordionIndex] = useState<number | null>(null);
 
   // Preload images function
@@ -40,7 +39,6 @@ export default function Scroller({ accordionData }: ScrollerProps) {
     return new Promise((resolve, reject) => {
       const img = new Image();
       img.onload = () => {
-        setImagesLoaded(prev => new Set(prev).add(src));
         resolve();
       };
       img.onerror = reject;

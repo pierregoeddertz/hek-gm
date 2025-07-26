@@ -21,7 +21,7 @@ export default function PrivacyPolicyPage() {
       <Unit second={{ spacingB: true, widthMax: 3, gapY: true }}>
         <Text align={1} as="h4">Datenerfassung auf dieser Website</Text>
         <Text align={1} as="h5">Wer ist verantwortlich für die Datenerfassung auf dieser Website?</Text>
-        <Text align={1} as="p">Die Datenverarbeitung auf dieser Website erfolgt durch die HEK Gebäudemanagement GmbH. Dessen Kontaktdaten können Sie dem Abschnitt „Hinweis zur Verantwortlichen Stelle" in dieser Datenschutzerklärung entnehmen.</Text>
+        <Text align={1} as="p">Die Datenverarbeitung auf dieser Website erfolgt durch die HEK Gebäudemanagement GmbH. Dessen Kontaktdaten können Sie dem Abschnitt &ldquo;Hinweis zur Verantwortlichen Stelle&rdquo; in dieser Datenschutzerklärung entnehmen.</Text>
       </Unit>
 
       <Unit second={{ spacingB: true, widthMax: 3, gapY: true }}>
@@ -123,7 +123,7 @@ export default function PrivacyPolicyPage() {
 
       <Unit second={{ spacingB: true, widthMax: 3, gapY: true }}>
         <Text align={1} as="h4">SSL- bzw. TLS-Verschlüsselung</Text>
-        <Text align={1} as="p">Diese Seite nutzt aus Sicherheitsgründen und zum Schutz der Übertragung vertraulicher Inhalte, wie zum Beispiel Bestellungen oder Anfragen, die Sie an uns als Seitenbetreiber senden, eine SSL- bzw. TLS-Verschlüsselung. Eine verschlüsselte Verbindung erkennen Sie daran, dass die Adresszeile des Browsers von „http://" auf „https://" wechselt und an dem Schloss-Symbol in Ihrer Browserzeile. Wenn die SSL- bzw. TLS-Verschlüsselung aktiviert ist, können die Daten, die Sie an uns übermitteln, nicht von Dritten mitgelesen werden.</Text>
+        <Text align={1} as="p">Diese Seite nutzt aus Sicherheitsgründen und zum Schutz der Übertragung vertraulicher Inhalte, wie zum Beispiel Bestellungen oder Anfragen, die Sie an uns als Seitenbetreiber senden, eine SSL- bzw. TLS-Verschlüsselung. Eine verschlüsselte Verbindung erkennen Sie daran, dass die Adresszeile des Browsers von &ldquo;http://&rdquo; auf &ldquo;https://&rdquo; wechselt und an dem Schloss-Symbol in Ihrer Browserzeile. Wenn die SSL- bzw. TLS-Verschlüsselung aktiviert ist, können die Daten, die Sie an uns übermitteln, nicht von Dritten mitgelesen werden.</Text>
       </Unit>
 
       <Unit second={{ spacingB: true, widthMax: 3, gapY: true }}>

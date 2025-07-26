@@ -2,9 +2,12 @@ import Media from '../../components/Media';
 import Text from '../../components/Text';
 import Director from '../../components/Director';
 import Unit from '../../components/Unit';
-import HList from '../../components/HList';
 import { supabase } from '../../lib/supabase';
-import { redirect } from 'next/navigation';
+
+interface Section {
+  heading: string;
+  content: string;
+}
 
 export default async function ElektronikPage() {
   // Lade den zweiten HEK-Artikel (Elektronik)
@@ -44,7 +47,7 @@ export default async function ElektronikPage() {
           <Text align={1} as="p">{item.sections[0].content}</Text>
         ) : null}
       </Unit>
-      {item.sections && item.sections.slice(1).map((section: any, index: number) => (
+      {item.sections && item.sections.slice(1).map((section: Section, index: number) => (
         <Unit key={index} second={{ spacingB: true, widthMax: 3, gapY: true }}>         
           <Text align={1} as="h2" fontMid>{section.heading}</Text>
           <Text align={1} as="p">{section.content}</Text>
