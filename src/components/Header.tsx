@@ -1,10 +1,11 @@
 'use client';
 
-import React, { memo, useRef, useEffect, useCallback, useState } from 'react';
+import React, { useRef, useCallback, useEffect, memo } from 'react';
 import Director from './Director';
 import Button from './Button';
 import HList from './HList';
 import { usePathname } from 'next/navigation';
+import styles from './Header.module.css';
 
 export type HeaderProps = {
   right?: React.ReactNode | null;
@@ -21,7 +22,7 @@ const headerStyles = {
   },
 };
 
-const Header = memo(({ right, className = '' }: HeaderProps) => {
+const Header = memo(({ className = '' }: HeaderProps) => {
   const headerRef = useRef<HTMLDivElement>(null);
   const pathname = usePathname();
 

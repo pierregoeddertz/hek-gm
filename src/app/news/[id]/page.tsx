@@ -4,7 +4,6 @@ import Director from '../../../components/Director';
 import Unit from '../../../components/Unit';
 import HList from '../../../components/HList';
 import { supabase, NewsItem } from '../../../lib/supabase';
-import { notFound } from 'next/navigation';
 
 interface Props { 
   params: Promise<{ id: string }> 

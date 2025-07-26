@@ -194,7 +194,6 @@ export default function Promoter({ tableName, filterMode = 'promoted' }: Promote
 
   // Preload-Effekt für bessere Performance
   useEffect(() => {
-    const imageUrls = items.map(item => item.image_url).join(',');
     const preloadImages: HTMLImageElement[] = [];
     
     items.forEach(item => {

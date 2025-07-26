@@ -158,7 +158,7 @@ export default function PrivacyPolicyPage() {
           <li><strong>Funktionale Cookies:</strong> Diese ermöglichen erweiterte Funktionalitäten und Personalisierung.</li>
         </ul>
         <Text align={1} as="p" style={{ marginTop: '1rem' }}>
-          Ihre Cookie-Einstellungen werden in einem Cookie namens "cookie-consent" gespeichert und sind für 1 Jahr gültig. Sie können Ihre Einstellungen jederzeit über die Cookie-Richtlinie anpassen.
+          Ihre Cookie-Einstellungen werden in einem Cookie namens &ldquo;cookie-consent&rdquo; gespeichert und sind für 1 Jahr gültig. Sie können Ihre Einstellungen jederzeit über die Cookie-Richtlinie anpassen.
         </Text>
         <Text align={1} as="p" style={{ marginTop: '1rem' }}>
           Detaillierte Informationen zu allen verwendeten Cookies finden Sie in unserer <Button href="/cookies" text="Cookie-Richtlinie" underline target="_blank" aria-label="Cookie-Richtlinie (öffnet neues Fenster)" />.

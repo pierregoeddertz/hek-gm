@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { usePathname } from 'next/navigation';
 import styles from './CookieBanner.module.css';
 import Button from '../Button/Button';
@@ -22,30 +22,11 @@ export default function CookieBanner() {
   });
   
   const pathname = usePathname();
-  const isCookiePage = pathname === '/cookies';
-
-  useEffect(() => {
-    // Check if user has already made a choice
-    const savedConsent = localStorage.getItem('cookie-consent');
-    if (!savedConsent) {
-      setShowBanner(true);
-    } else {
-      try {
-        const parsedConsent = JSON.parse(savedConsent);
-        setConsent(parsedConsent);
-        // Apply consent settings
-        applyConsentSettings(parsedConsent);
-      } catch (error) {
-        console.error('Error parsing cookie consent:', error);
-        setShowBanner(true);
-      }
-    }
-  }, []);
 
   // Function to open settings from cookie page
-  const openSettings = () => {
+  const openSettings = useCallback(() => {
     setShowSettings(true);
-  };
+  }, []);
 
   // Expose function globally for use on cookie page
   useEffect(() => {
@@ -54,7 +35,7 @@ export default function CookieBanner() {
     }
   }, [openSettings]);
 
-  const applyConsentSettings = (settings: CookieConsent) => {
+  const applyConsentSettings = useCallback((settings: CookieConsent) => {
     // Apply analytics consent
     if (settings.analytics) {
       // Enable analytics cookies
@@ -72,7 +53,25 @@ export default function CookieBanner() {
       // Disable functional cookies
       disableFunctional();
     }
-  };
+  }, []);
+
+  useEffect(() => {
+    // Check if user has already made a choice
+    const savedConsent = localStorage.getItem('cookie-consent');
+    if (!savedConsent) {
+      setShowBanner(true);
+    } else {
+      try {
+        const parsedConsent = JSON.parse(savedConsent);
+        setConsent(parsedConsent);
+        // Apply consent settings
+        applyConsentSettings(parsedConsent);
+      } catch (error) {
+        console.error('Error parsing cookie consent:', error);
+        setShowBanner(true);
+      }
+    }
+  }, [applyConsentSettings]);
 
   const enableAnalytics = () => {
     // Enable Vercel Analytics, Next.js Analytics, etc.

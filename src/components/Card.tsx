@@ -27,11 +27,11 @@ export default function Card({
   createdAt,
   showDate = true,
 }: CardProps) {
-  const [isTouch, setIsTouch] = useState(false);
+  // Removed unused isTouch state
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
-      setIsTouch('ontouchstart' in window || navigator.maxTouchPoints > 0);
+      // setIsTouch('ontouchstart' in window || navigator.maxTouchPoints > 0); // This line was removed
     }
   }, []);
 

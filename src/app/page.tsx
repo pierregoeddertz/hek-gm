@@ -50,19 +50,10 @@ export default function Home() {
       )
     }
   ];
-  const [openStates, setOpenStates] = useState<boolean[]>(Array(accordionData.length).fill(false));
+  const [openStates, setOpenStates] = useState<boolean[]>([false, false, false]);
   const [hekIds, setHekIds] = useState<string[]>([]);
   const armRef = useRef<HTMLDivElement>(null);
-  // 1. Lege für jeden Arm im Bedienbereich und in der Demo einen eigenen State an:
-  // Bedienbereich:
-  const [showBackBedien1, setShowBackBedien1] = useState(false);
-  const [showBackBedien2, setShowBackBedien2] = useState(false);
-  const [showBackBedien3, setShowBackBedien3] = useState(false);
-  // Demo:
-  const [showBackDemo1, setShowBackDemo1] = useState(false);
-  const [showBackDemo2, setShowBackDemo2] = useState(false);
-  const [showBackDemo3, setShowBackDemo3] = useState(false);
-  const [showBackDemo4, setShowBackDemo4] = useState(false);
+  const [loading, setLoading] = useState(true);
   useEffect(() => {
     if (armRef.current) {
       // Entferne alle Vorkommen von setArmHeight, da armHeight bereits entfernt wurde und setArmHeight nicht mehr existiert.
