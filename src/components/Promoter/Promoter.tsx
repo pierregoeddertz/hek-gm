@@ -342,6 +342,14 @@ export default function Promoter({ tableName, filterMode = 'promoted' }: Promote
                     underline={true}
                     style={{ color: 'var(--clrL_a)' }}
                   />
+                ) : currentItem.tableName === 'hek' ? (
+                  // Für HEK-Artikel: Verwende die neuen Routen basierend auf der Position
+                  <Button 
+                    href={current === 0 ? "/heizung" : current === 1 ? "/elektronik" : "/klima"}
+                    text="Mehr erfahren"
+                    underline={true}
+                    style={{ color: 'var(--clrL_a)' }}
+                  />
                 ) : (
                   <Button 
                     href={`/${currentItem.tableName}/${currentItem.id}`}

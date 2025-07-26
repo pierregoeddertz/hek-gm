@@ -15,12 +15,12 @@
   --max_3: 350px;
 
   --clrL_a: #ffffff;
-  --clrL_m: #17171715;
+  --clrL_m: #17171721;
   --clrL_z: #171717;
   --clrL_b: #FF4D19;
 
   --clrD_a: #000000;
-  --clrD_m: #f5f5f521;
+  --clrD_m: #f5f5f530;
   --clrD_z: #f5f5f5;
 
   --clrA_a: var(--clrL_a);
@@ -180,7 +180,21 @@ select:focus-visible {
 
 @media (max-width: 700px) {
   .fontLarge {
-    font-size: 1.75rem;
-    line-height: 2.5rem;
+    font-size: 1.5rem;
+    line-height: 2.25rem;
   }
+}
+
+/* Chevron Animation */
+.chevron-closed,
+.chevron-open {
+  transition: transform 750ms cubic-bezier(0.8, 0, 0.25, 1);
+}
+
+.chevron-closed {
+  transform: rotate(0deg);
+}
+
+.chevron-open {
+  transform: rotate(90deg);
 }

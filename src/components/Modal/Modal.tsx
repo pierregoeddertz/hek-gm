@@ -112,7 +112,10 @@ export default function Modal({ children }: ModalProps) {
           aria-label="Sidepanel schließen"
           disabled={isClosing}
         >
-          ×
+          <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <line x1="4.35355" y1="4.64645" x2="13.3536" y2="13.6464" stroke="var(--clrA_z)" strokeWidth="1" strokeLinecap="round"/>
+            <line x1="13.3536" y1="4.64645" x2="4.35355" y2="13.6464" stroke="var(--clrA_z)" strokeWidth="1" strokeLinecap="round"/>
+          </svg>
         </button>
         {children}
       </div>

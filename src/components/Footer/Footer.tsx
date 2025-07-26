@@ -16,12 +16,18 @@ export default function Footer({ className = '' }: FooterProps) {
           <Text style={{ opacity: 0.6 }}>
             © {new Date().getFullYear()} HEK-GM. Alle Rechte vorbehalten.
           </Text>
-          <Director direction="h 1 1" gapX style={{ alignItems: 'center' }}>
+          <Director direction="h 1 1" gapX style={{ alignItems: 'center', flexWrap: 'wrap' }}>
             <Link href="/impressum" className={styles.link}>
               <Text style={{ opacity: 0.6 }}>Impressum</Text>
             </Link>
             <Link href="/datenschutz" className={styles.link}>
               <Text style={{ opacity: 0.6 }}>Datenschutz</Text>
+            </Link>
+            <Link href="/cookies" className={styles.link}>
+              <Text style={{ opacity: 0.6 }}>Cookies</Text>
+            </Link>
+            <Link href="/barrierefreiheit" className={styles.link}>
+              <Text style={{ opacity: 0.6 }}>Barrierefreiheit</Text>
             </Link>
           </Director>
         </Director>

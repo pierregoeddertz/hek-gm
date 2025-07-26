@@ -69,7 +69,7 @@ export default function SmartflowerPage() {
 
       {/* Dragger mit Smartflower-Artikeln */}
       {smartflowerItems && smartflowerItems.filter(item => item.position === 'Dragger').length > 0 && (
-        <Unit second={{ paddingX: false }}>
+        <Unit second={{ spacingT: true, paddingX: false }}>
           <Dragger 
             second={{ direction: 'h 1 3', gapX: true, paddingX: true, style: { paddingBottom: 'var(--hgt_header)' } }}
           >

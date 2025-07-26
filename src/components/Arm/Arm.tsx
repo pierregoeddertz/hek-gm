@@ -41,17 +41,21 @@ const Arm = forwardRef<HTMLDivElement, ArmProps>(function Arm({
     const vectorEl = vectorRef.current;
     const pathEl = pathRef.current;
     if (!vectorEl || !pathEl) return;
-    const w = vectorEl.clientWidth;
+    
+    // Use getBoundingClientRect for more accurate measurements
+    const rect = vectorEl.getBoundingClientRect();
+    const w = rect.width || vectorEl.clientWidth;
     const KINK = 12;
     let d: string;
+    
     if (isLeft) {
       d = isTop
-        ? `M0 0 L${KINK} ${KINK} L${w - 1} ${KINK}`
-        : `M0 ${KINK} L${KINK} 0 L${w - 1} 0`;
+        ? `M0 0 L${KINK} ${KINK} L${w} ${KINK}`
+        : `M0 ${KINK} L${KINK} 0 L${w} 0`;
     } else {
       d = isTop
-        ? `M0 ${KINK} L${w - KINK} ${KINK} L${w - 1} 0`
-        : `M0 0 L${w - KINK} 0 L${w - 1} ${KINK}`;
+        ? `M0 ${KINK} L${w - KINK} ${KINK} L${w} 0`
+        : `M0 0 L${w - KINK} 0 L${w} ${KINK}`;
     }
     pathEl.setAttribute("d", d);
   }, [isTop, isLeft]);
@@ -60,8 +64,14 @@ const Arm = forwardRef<HTMLDivElement, ArmProps>(function Arm({
     updatePath();
     const vectorEl = vectorRef.current;
     if (!vectorEl) return;
-    const ro = new ResizeObserver(updatePath);
+    
+    // Use ResizeObserver with better error handling
+    const ro = new ResizeObserver(() => {
+      // Add a small delay to ensure DOM is ready
+      requestAnimationFrame(updatePath);
+    });
     ro.observe(vectorEl);
+    
     return () => ro.disconnect();
   }, [updatePath]);
 
@@ -72,7 +82,13 @@ const Arm = forwardRef<HTMLDivElement, ArmProps>(function Arm({
   const vectorElement = (
     <div className={styles.vector} ref={vectorRef}>
       <svg xmlns="http://www.w3.org/2000/svg">
-        <path ref={pathRef} stroke={vectorColor || 'var(--clrA_m)'} strokeWidth="1" strokeLinecap="butt" fill="none" />
+        <path 
+          ref={pathRef} 
+          stroke={vectorColor || 'var(--clrA_m)'} 
+          strokeWidth="1" 
+          strokeLinecap="butt" 
+          fill="none"
+        />
       </svg>
     </div>
   );

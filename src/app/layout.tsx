@@ -4,6 +4,7 @@ import { Outfit } from "next/font/google";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import Director from "../components/Director";
+import CookieBanner from "../components/CookieBanner/CookieBanner";
 import "./globals.css";
 
 const outfit = Outfit({
@@ -41,6 +42,7 @@ export default function RootLayout({
           {children}
         </Director>
         <Footer className="shiftable" />
+        <CookieBanner />
         {modal}
       </body>
     </html>

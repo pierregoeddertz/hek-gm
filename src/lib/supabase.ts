@@ -55,5 +55,8 @@ export interface HekItem {
 export interface ReferenzenItem {
   id: number; // bigint
   created_at: string;
-  image_url?: string;
+  image_url?: string | null;
+  name: string;
+  category: 'Mess-, Steuerungs-, Regelungs- & Elektrotechnik' | 'Kälte-, Klima- & Lüftungstechnik' | 'TGA-Planung & Projektleitung';
+  content?: string | null;
 } 

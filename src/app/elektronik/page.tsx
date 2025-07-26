@@ -1,29 +1,20 @@
-import Media from '../../../components/Media';
-import Text from '../../../components/Text';
-import Director from '../../../components/Director';
-import Unit from '../../../components/Unit';
-import HList from '../../../components/HList';
-import { supabase, SmartflowerItem } from '../../../lib/supabase';
-import { notFound } from 'next/navigation';
+import Media from '../../components/Media';
+import Text from '../../components/Text';
+import Director from '../../components/Director';
+import Unit from '../../components/Unit';
+import HList from '../../components/HList';
+import { supabase } from '../../lib/supabase';
+import { redirect } from 'next/navigation';
 
-interface Props { 
-  params: Promise<{ id: string }> 
-}
-
-export default async function SmartflowerDetailPage({ params }: Props) {
-  const { id } = await params;
-
-  // Prüfe, ob id ein UUID ist (8-4-4-4-12 hex)
-  const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
-  const isUUID = uuidRegex.test(id);
-
+export default async function ElektronikPage() {
+  // Lade den zweiten HEK-Artikel (Elektronik)
   const { data, error } = await supabase
-    .from('smartflower')
+    .from('hek')
     .select('*')
-    .eq(isUUID ? 'id' : 'slug', id)
-    .single();
+    .order('created_at', { ascending: false })
+    .limit(2);
 
-  if (error || !data) {
+  if (error || !data || data.length < 2) {
     return (
       <Unit second={{ spacingT: true, spacingB: true, widthMax: 3 }}>
         <Text align={1} as="h2" fontLarge>Eintrag nicht gefunden</Text>
@@ -32,7 +23,7 @@ export default async function SmartflowerDetailPage({ params }: Props) {
     );
   }
 
-  const item = data as SmartflowerItem;
+  const item = data[1];
 
   return (
     <>
@@ -44,7 +35,7 @@ export default async function SmartflowerDetailPage({ params }: Props) {
       </Unit>
       {item.image_url && (
         <Unit second={{ widthMax: 2, padding0: true }}>
-          <Media src={item.image_url} alt={item.title} aspectRatio={'16:9'} />
+          <Media src={item.image_url} alt={item.title} aspectRatio={item.aspect_ratio || '16:9'} />
         </Unit>
       )}
       <Unit second={{ spacingT: true, spacingB: true, widthMax: 3, gapY: true }}>
@@ -53,7 +44,7 @@ export default async function SmartflowerDetailPage({ params }: Props) {
           <Text align={1} as="p">{item.sections[0].content}</Text>
         ) : null}
       </Unit>
-      {item.sections && item.sections.slice(1).map((section, index) => (
+      {item.sections && item.sections.slice(1).map((section: any, index: number) => (
         <Unit key={index} second={{ spacingB: true, widthMax: 3, gapY: true }}>         
           <Text align={1} as="h2" fontMid>{section.heading}</Text>
           <Text align={1} as="p">{section.content}</Text>

@@ -20,12 +20,33 @@ interface ScrollerProps {
   accordionData: AccordionDataType[];
 }
 
+// Category order as specified
+const CATEGORY_ORDER = [
+  'Mess-, Steuerungs-, Regelungs- & Elektrotechnik',
+  'Kälte-, Klima- & Lüftungstechnik', 
+  'TGA-Planung & Projektleitung'
+] as const;
+
 export default function Scroller({ accordionData }: ScrollerProps) {
-  const [current, setCurrent] = useState(0);
-  const [isVisible, setIsVisible] = useState(false);
   const [openStates, setOpenStates] = useState<boolean[]>(Array(accordionData.length).fill(false));
   const [items, setItems] = useState<ReferenzenItem[]>([]);
   const [loading, setLoading] = useState(true);
+  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
+  const [imagesLoaded, setImagesLoaded] = useState<Set<string>>(new Set());
+  const [openAccordionIndex, setOpenAccordionIndex] = useState<number | null>(null);
+
+  // Preload images function
+  const preloadImage = (src: string): Promise<void> => {
+    return new Promise((resolve, reject) => {
+      const img = new Image();
+      img.onload = () => {
+        setImagesLoaded(prev => new Set(prev).add(src));
+        resolve();
+      };
+      img.onerror = reject;
+      img.src = src;
+    });
+  };
 
   // Lade Referenzen aus Supabase
   useEffect(() => {
@@ -43,7 +64,19 @@ export default function Scroller({ accordionData }: ScrollerProps) {
         }
 
         if (data && data.length > 0) {
-          setItems(data.filter(item => item.image_url)); // Nur Items mit Bildern
+          setItems(data);
+          
+          // Preload all images
+          const imageUrls = data
+            .filter(item => item.image_url)
+            .map(item => item.image_url!);
+          
+          // Preload images in parallel
+          Promise.allSettled(
+            imageUrls.map(url => preloadImage(url))
+          ).then(() => {
+            console.log('All images preloaded');
+          });
         }
       } catch (error) {
         console.error('Error:', error);
@@ -55,39 +88,29 @@ export default function Scroller({ accordionData }: ScrollerProps) {
     loadReferenzen();
   }, []);
 
-  useEffect(() => {
-    if (items.length > 0) {
-      setIsVisible(true);
+  // Group items by category
+  const itemsByCategory = items.reduce((acc, item) => {
+    if (!acc[item.category]) {
+      acc[item.category] = [];
     }
-  }, [items.length]);
+    acc[item.category].push(item);
+    return acc;
+  }, {} as Record<string, ReferenzenItem[]>);
 
+  // Create a flat array of all items for hover indexing
+  const allItems = CATEGORY_ORDER.flatMap(category => itemsByCategory[category] || []);
+
+  // Set initial hovered index to first item if available
   useEffect(() => {
-    if (loading || items.length === 0) return;
-
-    if (items.length <= 1) {
-      setIsVisible(false);
-      const timeout = setTimeout(() => setIsVisible(true), 100);
-      return () => clearTimeout(timeout);
+    if (allItems.length > 0 && hoveredIndex === null) {
+      setHoveredIndex(0);
     }
-    
-    setIsVisible(false);
-    const fadeInTimeout = setTimeout(() => setIsVisible(true), 100);
-    
-    const holdDuration = 5000;
-    const totalDuration = holdDuration + 750; // 750ms ist die Animation duration
-    
-    const nextTimeout = setTimeout(() => {
-      setIsVisible(false);
-      setTimeout(() => {
-        setCurrent((p) => (p + 1) % items.length);
-      }, 750); // Warten bis fade out complete ist
-    }, totalDuration);
+  }, [allItems.length, hoveredIndex]);
 
-    return () => {
-      clearTimeout(fadeInTimeout);
-      clearTimeout(nextTimeout);
-    };
-  }, [current, items.length, loading]);
+  // Handle accordion toggle - only one can be open at a time
+  const handleAccordionToggle = (index: number) => {
+    setOpenAccordionIndex(openAccordionIndex === index ? null : index);
+  };
 
   let content = null;
   if (loading) {
@@ -103,31 +126,34 @@ export default function Scroller({ accordionData }: ScrollerProps) {
         <Text>Lädt...</Text>
       </div>
     );
-  } else if (items.length === 0) {
-    content = null;
+  } else if (allItems.length === 0 || hoveredIndex === null) {
+    content = null; // Or show a placeholder if desired
   } else {
-    const data = items[current];
-    const isVideo = /\.(mp4|webm|mov)$/i.test(data.image_url || '');
-    content = isVideo ? (
-      <video
-        className={`${styles.media} ${isVisible ? styles.visible : styles.hidden}`}
-        src={data.image_url}
-        autoPlay
-        loop
-        muted
-        playsInline
-        style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }}
-        draggable={false}
-      />
-    ) : (
-      // eslint-disable-next-line @next/next/no-img-element
-      <img
-        className={`${styles.media} ${isVisible ? styles.visible : styles.hidden}`}
-        src={data.image_url}
-        alt={`Referenz ${data.id}`}
-        draggable={false}
-      />
-    );
+    const data = allItems[hoveredIndex];
+    if (data.image_url) {
+      const isVideo = /\.(mp4|webm|mov)$/i.test(data.image_url);
+      content = isVideo ? (
+        <video
+          className={styles.media}
+          src={data.image_url}
+          autoPlay
+          loop
+          muted
+          playsInline
+          style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', opacity: 0.33 }}
+          draggable={false}
+        />
+      ) : (
+        // eslint-disable-next-line @next/next/no-img-element
+        <img
+          className={styles.media}
+          src={data.image_url}
+          alt={`Referenz ${data.name}`}
+          draggable={false}
+          style={{ opacity: 0.33 }}
+        />
+      );
+    }
   }
 
   return (
@@ -154,29 +180,46 @@ export default function Scroller({ accordionData }: ScrollerProps) {
             </Accordion>
           )}
         </Unit>
-        <Unit second={{ spacingT: true, spacingB: true, widthMax: 1, style: { gap: 'var(--vlu_spacing_1)', position: 'relative', zIndex: 1 }, className: styles.whiteText }}>
-          <Director as="ol" direction="v 2 1" style={{ gap: '.5rem', listStyle: 'none' }}>
-            <Text as="h4" style={{ marginBottom: '.5rem' }}>Mess-, Steuerungs-, Regelungs- & Elektrotechnik</Text>
-            <Text as="li" fontLarge>Opel</Text>
-            <Text as="li" fontLarge>Amazon Zentrallager</Text>
-            <Text as="li" fontLarge>The Squaire</Text>
-            <Text as="li" fontLarge>Winx</Text>
-            <Text as="li" fontLarge>Grand Tower</Text>
-          </Director>
-          <Director as="ol" direction="v 1 1" style={{ gap: '.5rem', listStyle: 'none'  }}>
-            <Text as="h4" style={{ marginBottom: '.5rem' }}>Kälte-, Klima- & Lüftungstechnik</Text>
-            <Text as="li" fontLarge>Porsche Museum</Text>
-            <Text as="li" fontLarge>Ostbahnhof</Text>
-            <Text as="li" fontLarge>Courtyard bei Marriott Hotel</Text>
-            <Text as="li" fontLarge>Deutsche Bahn</Text>
-          </Director>
-          <Director as="ol" direction="v 1 1" style={{ gap: '.5rem', marginBottom: '5rem', listStyle: 'none'  }}>
-            <Text as="h4" style={{ marginBottom: '.5rem' }}>TGA-Planung & Projektleitung</Text>
-            <Text as="li" fontLarge>Flughafen BER</Text>
-            <Text as="li" fontLarge>Europa Passage</Text>
-            <Text as="li" fontLarge>Four</Text>
-            <Text as="li" fontLarge>DFB Zentrale</Text>
-          </Director>
+        <Unit second={{ spacingT: true, spacingB: true, widthMax: 1, style: { gap: '3rem', position: 'relative', zIndex: 1 }, className: styles.whiteText }}>
+          {CATEGORY_ORDER.map((category, categoryIndex) => {
+            const categoryItems = itemsByCategory[category] || [];
+            if (categoryItems.length === 0) return null;
+
+            // Calculate starting index for this category
+            const startIndex = CATEGORY_ORDER.slice(0, categoryIndex).reduce((sum, cat) => sum + (itemsByCategory[cat]?.length || 0), 0);
+
+            return (
+              <Director key={category} as="ol" direction="v 2 1" spacingT style={{ 
+                listStyle: 'none',
+                marginBottom: categoryIndex === CATEGORY_ORDER.length - 1 ? '3rem' : '0'
+              }}>
+                <Text style={{ marginBottom: '.5rem' }} as="h4">{category}</Text>
+                {categoryItems.map((item, itemIndex) => {
+                  const globalIndex = startIndex + itemIndex;
+                  const isOpen = openAccordionIndex === globalIndex;
+                  
+                  return (
+                    <li 
+                      key={item.id}
+                      style={{ 
+                        listStyle: 'none'
+                      }}
+                    >
+                      <Accordion
+                        title={item.name}
+                        open={isOpen}
+                        onClick={() => handleAccordionToggle(globalIndex)}
+                        variant="list"
+                        content={item.content || undefined}
+                        onMouseEnter={() => setHoveredIndex(globalIndex)}
+                        isHovered={hoveredIndex === globalIndex}
+                      />
+                    </li>
+                  );
+                })}
+              </Director>
+            );
+          })}
         </Unit>
     </Director>
     </Director>

@@ -131,7 +131,7 @@ export default function Home() {
                     ref={armRef}
                     side="right"
                     staticLabel="Heizung"
-                    {...(hekIds[0] ? { href: `/hek/${hekIds[0]}` } : { disabled: true })}
+                    {...(hekIds[0] ? { href: `/heizung` } : { disabled: true })}
                     style={{ width: '140%', marginLeft: '-60px' }}
                   />
                 </div>
@@ -143,11 +143,11 @@ export default function Home() {
                   <Arm
                     direction="down"
                     staticLabel="Elektronik"
-                    {...(hekIds[1] ? { href: `/hek/${hekIds[1]}` } : { disabled: true })}
+                    {...(hekIds[1] ? { href: `/elektronik` } : { disabled: true })}
                     style={{ width: '140%' }}
                   />
                 </div>
-                <svg viewBox="0 0 275 381" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ height: 'var(--max_3)', marginRight: '50px' }}>
+                <svg viewBox="0 0 275 381" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ height: 'var(--max_3)', marginRight: '30px' }}>
                   <path d="M254.99 222.375V150.799H85.4408L136.992 222.375H254.99Z" fill="var(--clrL_b)" />
                   <path d="M85.4408 150.799V73.8192H271.143V0.625H53.1059L0.39917 73.8192V380.625H221.658L274.364 307.416H85.4408V150.799Z" fill="var(--clrL_b)" />
                 </svg>
@@ -165,7 +165,7 @@ export default function Home() {
                   <Arm
                     side="left"
                     staticLabel="Klima"
-                    {...(hekIds[2] ? { href: `/hek/${hekIds[2]}` } : { disabled: true })}
+                    {...(hekIds[2] ? { href: `/klima` } : { disabled: true })}
                     style={{ width: '140%' }}
                   />
                 </div>
