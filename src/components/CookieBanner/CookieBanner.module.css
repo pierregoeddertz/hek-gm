@@ -4,6 +4,7 @@
   left: 0;
   right: 0;
   background: var(--clrA_a);
+  color: var(--clrA_z);
   border-top: 1px solid var(--clrA_m);
   z-index: 9999;
   padding: 1rem;
@@ -17,6 +18,7 @@
   left: 0;
   right: 0;
   background: var(--clrA_a);
+  color: var(--clrA_z);
   border-top: 1px solid var(--clrA_m);
   z-index: 9999;
   padding: 1rem;
@@ -30,6 +32,7 @@
   max-width: 1200px;
   margin: 0 auto;
   padding: 0 1rem;
+  color: var(--clrA_z);
 }
 
 .buttons {
@@ -51,7 +54,8 @@
   padding: 1rem;
   border: 1px solid var(--clrA_l);
   border-radius: 4px;
-  background: rgba(255, 255, 255, 0.05);
+  background: var(--clrA_a);
+  color: var(--clrA_z);
 }
 
 .cookieHeader {
@@ -59,6 +63,7 @@
   justify-content: space-between;
   align-items: center;
   margin-bottom: 0.5rem;
+  color: var(--clrA_z);
 }
 
 .checkbox {
@@ -149,12 +154,13 @@
 @media (prefers-color-scheme: dark) {
   .banner,
   .settings {
-    background: var(--clrA_z);
-    color: var(--clrA_a);
+    background: var(--clrA_a);
+    color: var(--clrA_z);
   }
 
   .cookieGroup {
-    background: rgba(0, 0, 0, 0.2);
+    background: var(--clrA_a);
     border-color: var(--clrA_m);
+    color: var(--clrA_z);
   }
 } 
