@@ -235,7 +235,7 @@ export default function PrivacyPolicyPage() {
         <Text align={1} as="h3" fontMid>8. Änderungen dieser Datenschutzerklärung</Text>
         <Text align={1} as="p">Wir behalten uns vor, diese Datenschutzerklärung anzupassen, damit sie stets den aktuellen rechtlichen Anforderungen entspricht oder um Änderungen unserer Leistungen in der Datenschutzerklärung umzusetzen, z. B. bei der Einführung neuer Services. Für Ihren erneuten Besuch gilt dann die neue Datenschutzerklärung.</Text>
         <Text align={1} as="p" style={{ marginTop: '1rem', fontSize: '0.9em', opacity: 0.8 }}>
-          Stand: 26. Juli 2025
+          Stand: 19. September 2025
         </Text>
       </Unit>
     </>
