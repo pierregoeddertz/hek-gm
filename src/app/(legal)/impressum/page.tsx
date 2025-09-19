@@ -147,7 +147,7 @@ export default function ImprintPage() {
 
       <Unit second={{ spacingB: true, widthMax: 3, gapY: true }}>
         <Text align={1} as="p" style={{ fontSize: '0.9em', opacity: 0.8 }}>
-          Stand: 26. Juli 2025
+          Stand: 19. September 2025
         </Text>
       </Unit>
     </>
