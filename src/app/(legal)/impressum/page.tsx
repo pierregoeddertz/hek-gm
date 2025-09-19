@@ -16,7 +16,7 @@ export default function ImprintPage() {
         <Text align={1} as="h3" fontMid>Angaben gemäß § 5 TMG</Text>
         <Text align={1} as="p">
           <strong>HEK Gebäudemanagement GmbH</strong><br />
-          St. Florian Str. 36<br />
+          St.-Florian Str. 3<br />
           64521 Groß-Gerau<br />
           Deutschland
         </Text>
