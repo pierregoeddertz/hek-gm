@@ -83,7 +83,7 @@ export default function AccessibilityPage() {
         </Text>
         <Text align={1} as="p" style={{ marginTop: '1rem' }}>
           <strong>HEK Gebäudemanagement GmbH</strong><br />
-          St. Florian Str. 36<br />
+          St.-Florian Str. 3<br />
           64521 Groß-Gerau<br />
           Deutschland<br /><br />
           Telefon: +49-151-64657991<br />
